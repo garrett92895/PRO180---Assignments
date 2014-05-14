@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class MoveReader {
 	private BufferedReader br;
-	HashPiece h;
+	PieceMap h;
 	private final String PIECES = "(q|k|b|n|r|p)";
 	private final String COLORS = "(l|d)";
 	private final String RANKS = "([a-h])";
@@ -16,8 +16,8 @@ public class MoveReader {
 	
 	public MoveReader(String fileName)
 	{
-		File file = new File(fileName);
-		h = new HashPiece();
+		File file = new File(fileName);	
+		h = new PieceMap();
 		try
 		{
 			br = new BufferedReader(new FileReader(fileName));
@@ -37,14 +37,14 @@ public class MoveReader {
 		{
 			while((line = br.readLine()) != null)
 			{
-				directives = line.toLowerCase().split("\\s");
+				directives = line.toLowerCase().split("\\s"); //Splits each line into an array of directives
 				boolean matches = false;
 				
 				//Loops through the array of strings and checks to see if they match the requirements, if they don't then the
 				//for loop is finished
 				for(int i = 0; i < directives.length; i++)
 				{
-					if(directives[i].matches("(" + (RANKS + COLUMNS) + "|" + ( PIECES + COLORS + RANKS + COLUMNS) + ")" + "\\*?"))
+					if(directives[i].matches("(" + (RANKS + COLUMNS) + "|" + ( PIECES + COLORS + RANKS + COLUMNS) + ")" + "\\*?")) //Regex
 					{
 						matches = true;
 					}
@@ -66,6 +66,7 @@ public class MoveReader {
 			e.printStackTrace();
 		}
 		
+		//Closes the stream
 		try {
 			br.close();
 		} catch (IOException e) {
@@ -76,6 +77,7 @@ public class MoveReader {
 	
 	private void parseMove(String[] chessMoves)
 	{
+		//Output depends on the number of directives
 		switch(chessMoves.length)
 		{
 		case 1:
