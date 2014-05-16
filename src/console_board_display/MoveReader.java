@@ -5,9 +5,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MoveReader {
 	private BufferedReader br;
+	private MoveParser parser;
 	private final String PIECES = "([qkbnrp])";
 	private final String COLORS = "([ld])";
 	private final String RANKS = "([a-h])";
@@ -16,7 +18,7 @@ public class MoveReader {
 	
 	public MoveReader(String fileName)
 	{
-		
+		parser = new MoveParser();
 		File file = new File(fileName);	
 		try
 		{
@@ -29,13 +31,15 @@ public class MoveReader {
 		}
 	}
 	
-	public void runDirectives()
+	public Directive[] collectDirectives()
 	{		
 		String line;
 		String[] directives;
+		ArrayList<Directive> moves = new ArrayList<Directive>();
+		Directive[] returnMoves = null;
 		try 
 		{
-			if((line = br.readLine()) != null)
+			while((line = br.readLine()) != null)
 			{
 				directives = line.toLowerCase().split("\\s"); //Splits each line into an array of directives
 				boolean matches = false;
@@ -57,7 +61,7 @@ public class MoveReader {
 				
 				if(matches)
 				{
-					parseMove(directives);
+					moves.add(parser.parseMove(directives));
 				}
 			}
 		} 
@@ -66,6 +70,11 @@ public class MoveReader {
 			e.printStackTrace();
 		}
 		
+		returnMoves = new Directive[moves.size()];
+		for(int i = 0; i < returnMoves.length; i++)
+		{
+			returnMoves[i] = moves.get(i);
+		}
 		//Closes the stream
 		try {
 			br.close();
@@ -73,6 +82,7 @@ public class MoveReader {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return returnMoves;
 	}
 	
 
