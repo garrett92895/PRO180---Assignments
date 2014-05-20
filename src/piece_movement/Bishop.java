@@ -9,7 +9,7 @@ public class Bishop extends Piece{
 	}
 
 	@Override
-	public boolean moveIsValid(Position endPosition, char[] chessBoard,
+	public boolean moveIsValid(Position endPosition, char[][] chessBoard,
 			Piece[] darkPieces, Piece[] lightPieces) 
 	{
 		
@@ -17,7 +17,7 @@ public class Bishop extends Piece{
 	}
 
 	@Override
-	public boolean captureIsValid(Position endPosition, char[] chessBoard,
+	public boolean captureIsValid(Position endPosition, char[][] chessBoard,
 			Piece[] darkPieces, Piece[] lightPieces) 
 	{
 		

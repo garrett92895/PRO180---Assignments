@@ -1,6 +1,6 @@
 package piece_movement;
 
-public class Position {
+public class Position implements Comparable<Position>{
 	private int row;
 	private int column;
 	
@@ -10,6 +10,18 @@ public class Position {
 		this.column = column;
 	}
 
+	@Override
+	public int compareTo(Position position2) {
+		int result = 0;
+		
+		if(row == position2.getRow() && column == position2.getColumn())
+		{
+			result = 0;
+		}
+		
+		return result;
+	}
+	
 	public int getRow() {
 		return row;
 	}
@@ -25,4 +37,5 @@ public class Position {
 	public void setColumn(int column) {
 		this.column = column;
 	}
+
 }

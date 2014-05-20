@@ -8,14 +8,14 @@ public class Queen extends Piece{
 	}
 
 	@Override
-	public boolean moveIsValid(Position endPosition, char[] chessBoard,
+	public boolean moveIsValid(Position endPosition, char[][] chessBoard,
 			Piece[] darkPieces, Piece[] lightPieces) {
 		
 		return false;
 	}
 
 	@Override
-	public boolean captureIsValid(Position endPosition, char[] chessBoard,
+	public boolean captureIsValid(Position endPosition, char[][] chessBoard,
 			Piece[] darkPieces, Piece[] lightPieces) {
 		
 		return false;
