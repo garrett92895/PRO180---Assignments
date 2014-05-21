@@ -4,7 +4,7 @@ public class Bishop extends Piece{
 
 	public Bishop(boolean isDark, Position position) 
 	{
-		super(isDark, position);
+		super(isDark, position, 'b');
 		
 	}
 

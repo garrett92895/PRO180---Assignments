@@ -4,7 +4,7 @@ public class Rook extends Piece{
 
 	public Rook(boolean isDark, Position position) 
 	{
-		super(isDark, position);
+		super(isDark, position, 'r');
 		// TODO Auto-generated constructor stub
 	}
 

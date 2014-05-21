@@ -4,7 +4,7 @@ public class King extends Piece{
 
 	public King(boolean isDark, Position position) 
 	{
-		super(isDark, position);
+		super(isDark, position, 'k');
 	}
 
 	@Override
@@ -28,15 +28,21 @@ public class King extends Piece{
 				boolean hasPiece = false;
 				for(int i = 0; i < darkPieces.length; i++)				//Checks to see if there are any pieces on the desired position already
 				{
-					if(darkPieces[i].getPosition().getRow() == endPosition.getRow()
-							&& darkPieces[i].getPosition().getColumn() == endPosition.getColumn())
+					if(darkPieces[i] != null) 
 					{
-						hasPiece = true;
+						if(darkPieces[i].getPosition().getRow() == endPosition.getRow()
+								&& darkPieces[i].getPosition().getColumn() == endPosition.getColumn())
+						{
+							hasPiece = true;
+						}
 					}
-					if(lightPieces[i].getPosition().getRow() == endPosition.getRow()
-							&& lightPieces[i].getPosition().getColumn() == endPosition.getColumn())
+					if(lightPieces[i] != null)
 					{
-						hasPiece = true;
+						if(lightPieces[i].getPosition().getRow() == endPosition.getRow()
+								&& lightPieces[i].getPosition().getColumn() == endPosition.getColumn())
+						{
+							hasPiece = true;
+						}
 					}
 				}
 				
@@ -73,20 +79,26 @@ public class King extends Piece{
 				boolean hasOpposingPiece = false;
 				for(int i = 0; i < darkPieces.length; i++)				//Checks to see if there are any pieces on the desired position already
 				{														//and if so, determines whether or not it is a piece of the enemy's color
-					if(darkPieces[i].getPosition().getRow() == endPosition.getRow()
-							&& darkPieces[i].getPosition().getColumn() == endPosition.getColumn())
+					if(darkPieces[i] != null)
 					{
-						if(!isDark)
+						if(darkPieces[i].getPosition().getRow() == endPosition.getRow()
+								&& darkPieces[i].getPosition().getColumn() == endPosition.getColumn())
 						{
-							hasOpposingPiece = true;
+							if(!isDark)
+							{
+								hasOpposingPiece = true;
+							}
 						}
 					}
-					if(lightPieces[i].getPosition().getRow() == endPosition.getRow()
-							&& lightPieces[i].getPosition().getColumn() == endPosition.getColumn())
+					if(lightPieces[i] != null)
 					{
-						if(isDark)
+						if(lightPieces[i].getPosition().getRow() == endPosition.getRow()
+								&& lightPieces[i].getPosition().getColumn() == endPosition.getColumn())
 						{
-							hasOpposingPiece = true;
+							if(isDark)
+							{
+								hasOpposingPiece = true;
+							}
 						}
 					}
 				}
@@ -104,5 +116,25 @@ public class King extends Piece{
 		}
 		return valid;
 	}
+	
+//	public boolean castleIsValid(Position endPosition, char[][] chessBoard,
+//			Piece[] darkPieces, Piece[] lightPieces)
+//	{
+//		boolean valid = false;
+//		
+//		if(moveCount == 0)
+//		{
+//			if(isDark)
+//			{
+//				if
+//			}
+//			if(!isDark)
+//			{
+//				
+//			}
+//		}	
+//		
+//		return valid;
+//	}
 
 }

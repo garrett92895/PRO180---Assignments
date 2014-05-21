@@ -12,7 +12,6 @@ public class Driver {
 		{
 			game.executeDirective(moves[i]);
 		}
-		System.out.println(game);
 	}
 
 }

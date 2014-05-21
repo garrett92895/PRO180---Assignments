@@ -12,7 +12,7 @@ public class Position implements Comparable<Position>{
 
 	@Override
 	public int compareTo(Position position2) {
-		int result = 0;
+		int result = 7;
 		
 		if(row == position2.getRow() && column == position2.getColumn())
 		{
@@ -37,5 +37,10 @@ public class Position implements Comparable<Position>{
 	public void setColumn(int column) {
 		this.column = column;
 	}
-
+	
+	@Override
+	public String toString()
+	{
+		return "Row: " + row + "\n" + "Column: " + column;
+	}
 }

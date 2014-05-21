@@ -4,7 +4,7 @@ public class Pawn extends Piece{
 
 	public Pawn(boolean isDark, Position position) 
 	{
-		super(isDark, position);
+		super(isDark, position, 'p');
 	}
 
 	@Override

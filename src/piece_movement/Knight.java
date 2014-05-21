@@ -4,7 +4,7 @@ public class Knight extends Piece{
 
 	public Knight(boolean isDark, Position position) 
 	{
-		super(isDark, position);
+		super(isDark, position, 'n');
 		
 	}
 

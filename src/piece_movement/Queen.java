@@ -3,7 +3,7 @@ package piece_movement;
 public class Queen extends Piece{
 
 	public Queen(boolean isDark, Position position) {
-		super(isDark, position);
+		super(isDark, position, 'q');
 		
 	}
 
