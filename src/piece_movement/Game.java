@@ -30,18 +30,45 @@ public class Game {
 			piece.getPosition().setColumn(placeMove.getColumn1());
 			
 			System.out.println("Placing " + PIECE_MAP.returnPiece(piece.getPieceChar()) + " on "
-					+ );
+					+ (char)(piece.getPosition().getColumn() + 'A') + (piece.getPosition().getRow() + 1));
+			updateBoard();
+			System.out.println(toString());
 		}
 		else if(move instanceof CastleDirective)
 		{
 			CastleDirective castleMove = (CastleDirective) move;
-			char king = chessBoard[castleMove.getRow1()][castleMove.getColumn1()];
-			char rook = chessBoard[castleMove.getRookMove().getRow1()][castleMove.getRookMove().getColumn1()];
-			
-			chessBoard[castleMove.getRow1()][castleMove.getColumn1()] = '-';
-			chessBoard[castleMove.getRookMove().getRow1()][castleMove.getRookMove().getColumn1()] = '-';
-			chessBoard[castleMove.getRow2()][castleMove.getColumn2()] = king;
-			chessBoard[castleMove.getRookMove().getRow2()][castleMove.getRookMove().getColumn2()] = rook;
+			boolean isDark = false;
+			if(castleMove.getRow1() == 0)
+			{
+				isDark = true;
+			}
+
+			Piece tempPiece1 = findPiece('k', isDark);
+			Piece tempPiece2 = findPiece(new Position(castleMove.getRookMove().getRow1(), castleMove.getRookMove().getColumn1()));
+			King king = null;
+			Rook rook = null;
+			if(tempPiece1 instanceof King && tempPiece2 instanceof Rook)
+			{
+				king = (King) tempPiece1;
+				rook = (Rook) tempPiece2;
+				if(rook.getMoveCount() == 0)
+				{
+					if(king.castleIsValid(new Position(castleMove.getRow2(), castleMove.getColumn2()), chessBoard, darkPieces, lightPieces)
+							&& rook.moveIsClear(new Position(castleMove.getRookMove().getRow2(), castleMove.getRookMove().getColumn2()),
+									chessBoard, darkPieces, lightPieces))
+					{
+						king.setPosition(new Position(castleMove.getRow2(), castleMove.getColumn2()));
+						rook.setPosition(new Position(castleMove.getRookMove().getRow2(), castleMove.getRookMove().getColumn2()));
+						rook.incrementMoveCount();
+						
+						System.out.println("Castled King to " + (char)(king.getPosition().getColumn() + 'A') + (king.getPosition().getRow() + 1)
+								+ " and Rook to " + (char)(rook.getPosition().getColumn() + 'A') + (rook.getPosition().getRow() + 1));
+						updateBoard();
+						System.out.println(toString());
+					}
+				}
+			}
+
 		}
 		else if(move instanceof MoveDirective)
 		{
@@ -87,12 +114,18 @@ public class Game {
 				{
 					if(piece.moveIsValid(new Position(singleMove.getRow2(), singleMove.getColumn2()), chessBoard, darkPieces, lightPieces))
 					{
+						System.out.println(PIECE_MAP.returnPiece(piece.getPieceChar()) + " from " +
+								(char)(singleMove.getColumn1() + 'A') + (singleMove.getRow1() + 1)
+								+ " to " +
+								(char)(singleMove.getColumn2() + 'A') + (singleMove.getRow2() + 1));
 						piece.setPosition(new Position(singleMove.getRow2(), singleMove.getColumn2()));
+						updateBoard();
+						System.out.println(toString());
 					}
+					
 				}
 			}
 		}
-		updateBoard();
 	}
 	
 	public void updateBoard()
@@ -213,6 +246,40 @@ public class Game {
 		return returnPiece;
 	}
 	
+	public Piece findPiece(char pieceType, boolean isDark)
+	{
+		Piece piece = null;
+		
+		if(isDark)
+		{
+			
+			for(Piece p : darkPieces)
+			{
+				if(p != null)
+				{
+					if(p.getPieceChar() == pieceType)
+					{
+						piece = p;
+					}
+				}
+			}
+		}
+		else if(!isDark)
+		{
+			for(Piece p : lightPieces)
+			{
+				if(p != null)
+				{
+					if(p.getPieceChar() == pieceType)
+					{
+						piece = p;
+					}
+				}
+			}
+		}
+		
+		return piece;
+	}
 	@Override
 	public String toString()
 	{

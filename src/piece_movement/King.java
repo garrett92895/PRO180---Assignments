@@ -49,13 +49,9 @@ public class King extends Piece{
 				if(!hasPiece)
 				{
 					valid = true;
+					moveCount++;
 				}
 			}
-		}
-		
-		if(valid == true)
-		{
-			moveCount++;
 		}
 		return valid;
 	}
@@ -106,35 +102,47 @@ public class King extends Piece{
 				if(hasOpposingPiece)
 				{
 					valid = true;
+					moveCount++;
 				}
 			}
-		}
-		
-		if(valid == true)
-		{
-			moveCount++;
 		}
 		return valid;
 	}
 	
-//	public boolean castleIsValid(Position endPosition, char[][] chessBoard,
-//			Piece[] darkPieces, Piece[] lightPieces)
-//	{
-//		boolean valid = false;
-//		
-//		if(moveCount == 0)
-//		{
-//			if(isDark)
-//			{
-//				if
-//			}
-//			if(!isDark)
-//			{
-//				
-//			}
-//		}	
-//		
-//		return valid;
-//	}
+	public boolean castleIsValid(Position endPosition, char[][] chessBoard,
+			Piece[] darkPieces, Piece[] lightPieces)
+	{
+		boolean valid = false;
+		
+		if(moveCount == 0)
+		{
+			if(isDark)
+			{
+				if(endPosition.getRow() == 0)
+				{
+					if(endPosition.getColumn() == 6 || endPosition.getColumn() == 2)
+					{
+						valid = moveIsClear(endPosition, chessBoard, darkPieces, lightPieces);
+					}
+				}
+			}
+			else if(!isDark)
+			{
+				if(endPosition.getRow() == 7)
+				{
+					if(endPosition.getColumn() == 6 || endPosition.getColumn() == 2)
+					{
+						valid = moveIsClear(endPosition, chessBoard, darkPieces, lightPieces);
+					}
+				}
+			}
+		}	
+		if(valid)
+		{
+			moveCount++;
+		}
+		
+		return valid;
+	}
 
 }

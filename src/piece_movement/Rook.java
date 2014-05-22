@@ -5,23 +5,32 @@ public class Rook extends Piece{
 	public Rook(boolean isDark, Position position) 
 	{
 		super(isDark, position, 'r');
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public boolean moveIsValid(Position endPosition, char[][] chessBoard,
 			Piece[] darkPieces, Piece[] lightPieces) 
 	{
-		
-		return false;
+		boolean valid = false;
+		if(endPosition.getColumn() == position.getColumn()
+				|| endPosition.getRow() == position.getRow())
+		{
+			valid = moveIsClear(endPosition, chessBoard, darkPieces, lightPieces);
+		}
+		return valid;
 	}
 
 	@Override
 	public boolean captureIsValid(Position endPosition, char[][] chessBoard,
 			Piece[] darkPieces, Piece[] lightPieces) 
 	{
-		
-		return false;
+		boolean valid = false;
+		if(endPosition.getColumn() == position.getColumn()
+				|| endPosition.getRow() == position.getRow())
+		{
+			valid = captureIsClear(endPosition, chessBoard, darkPieces, lightPieces);
+		}
+		return valid;
 	}
 
 }

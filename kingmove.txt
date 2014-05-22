@@ -1,4 +1,11 @@
-KLa1
-d8 d7
-bdb1
-a1 b1*
+/KLa1
+/d8 d7
+/bdb1
+/a1 b1*
+
+Kle8
+rlh8
+blf7
+f7 d5
+nlb6
+b6 d7

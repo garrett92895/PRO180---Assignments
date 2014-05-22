@@ -21,10 +21,13 @@ public class Pawn extends Piece{
 				{
 					if(endPosition.getRow() < chessBoard.length)
 					{
-						if(chessBoard[endPosition.getColumn()][endPosition.getRow()] == '-'
-								&& chessBoard[endPosition.getColumn()][endPosition.getRow() + 1] == '-')
+						if(endPosition.getColumn() == position.getColumn())
 						{
-							valid = true;
+							if(chessBoard[endPosition.getRow()][endPosition.getColumn()] == '-'
+									&& chessBoard[endPosition.getRow() - 1][endPosition.getColumn()] == '-')
+							{
+								valid = true;
+							}
 						}
 					}
 				}
@@ -33,9 +36,12 @@ public class Pawn extends Piece{
 			{
 				if(endPosition.getRow() < chessBoard.length)
 				{
-					if(chessBoard[endPosition.getColumn()][endPosition.getRow()] == '-')
+					if(endPosition.getColumn() == position.getColumn())
 					{
-						valid = true;
+						if(chessBoard[endPosition.getRow()][endPosition.getColumn()] == '-')
+						{
+							valid = true;
+						}
 					}
 				}
 			}
@@ -48,21 +54,27 @@ public class Pawn extends Piece{
 				{
 					if(endPosition.getRow() >= 0)
 					{
-						if(chessBoard[endPosition.getColumn()][endPosition.getRow()] == '-'
-							&& chessBoard[endPosition.getColumn()][endPosition.getRow() - 1] == '-')
+						if(endPosition.getColumn() == position.getColumn())
 						{
-							valid = true;
+							if(chessBoard[endPosition.getRow()][endPosition.getColumn()] == '-'
+								&& chessBoard[endPosition.getRow() - 1][endPosition.getColumn()] == '-')
+							{
+								valid = true;
+							}
 						}
 					}
 				}
 			}
-			if(endPosition.getRow() == position.getRow() + 1)
+			if(endPosition.getRow() == position.getRow() - 1)
 			{
 				if(endPosition.getRow() < chessBoard.length)
 				{
-					if(chessBoard[endPosition.getColumn()][endPosition.getRow()] == '-')
+					if(endPosition.getColumn() == position.getColumn())
 					{
-						valid = true;
+						if(chessBoard[endPosition.getRow()][endPosition.getColumn()] == '-')
+						{
+							valid = true;
+						}
 					}
 				}
 			}
@@ -79,54 +91,38 @@ public class Pawn extends Piece{
 		
 		if(isDark)
 		{
-			if(moveCount == 0)
+			if(endPosition.getRow() - 1 == position.getRow())
 			{
-				if(endPosition.getRow() == position.getRow() + 2)
+				if(Math.abs(endPosition.getColumn() - position.getColumn()) == 1)
 				{
-					if(endPosition.getRow() < chessBoard.length)
+					for(int i = 0; i < lightPieces.length; i++)
 					{
-						if(chessBoard[endPosition.getColumn()][endPosition.getRow()] == '-'
-								&& chessBoard[endPosition.getColumn()][endPosition.getRow() + 1] == '-')
+						if(lightPieces[i] != null)
 						{
-							valid = true;
+							if(lightPieces[i].getPosition().compareTo(endPosition) == 0)
+							{
+								valid = true;
+							}
 						}
-					}
-				}
-			}
-			if(endPosition.getRow() == position.getRow() + 1)
-			{
-				if(endPosition.getRow() < chessBoard.length)
-				{
-					if(chessBoard[endPosition.getColumn()][endPosition.getRow()] == '-')
-					{
-						valid = true;
 					}
 				}
 			}
 		}
-		if(!isDark)
+		else
 		{
-			if(moveCount == 0)
+			if(position.getRow() - 1 == endPosition.getRow())
 			{
-				if(endPosition.getRow() == position.getRow() - 2)
+				if(Math.abs(endPosition.getColumn() - position.getColumn()) == 1)
 				{
-					if(endPosition.getRow() >= 0)
+					for(int i = 0; i < darkPieces.length; i++)
 					{
-						if(chessBoard[endPosition.getColumn()][endPosition.getRow()] == '-'
-							&& chessBoard[endPosition.getColumn()][endPosition.getRow() - 1] == '-')
+						if(darkPieces[i] != null)
 						{
-							valid = true;
+							if(darkPieces[i].getPosition().compareTo(endPosition) == 0)
+							{
+								valid = true;
+							}
 						}
-					}
-				}
-			}
-			if(endPosition.getRow() == position.getRow() + 1)
-			{
-				if(endPosition.getRow() < chessBoard.length)
-				{
-					if(chessBoard[endPosition.getColumn()][endPosition.getRow()] == '-')
-					{
-						valid = true;
 					}
 				}
 			}
