@@ -1,16 +1,15 @@
-package piece_movement;
+package turn_taking;
 
 public class Bishop extends Piece{
 
-	public Bishop(boolean isDark, Position position) 
+	public Bishop(int isDark, Position position) 
 	{
 		super(isDark, position, 'b');
 		
 	}
 
 	@Override
-	public boolean moveIsValid(Position endPosition, char[][] chessBoard,
-			Piece[] darkPieces, Piece[] lightPieces) 
+	public boolean moveIsValid(Position endPosition, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces) 
 	{
 		boolean valid = false;
 		if(Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) < UPPER_BOUND
@@ -23,8 +22,7 @@ public class Bishop extends Piece{
 	}
 
 	@Override
-	public boolean captureIsValid(Position endPosition, char[][] chessBoard,
-			Piece[] darkPieces, Piece[] lightPieces) 
+	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces) 
 	{
 		boolean valid = false;
 		if(Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) < UPPER_BOUND

@@ -13,11 +13,11 @@ public class Knight extends Piece{
 			Piece[] darkPieces, Piece[] lightPieces) 
 	{
 		boolean valid = false;
+		double row = (endPosition.getRow() - position.getRow());
+		double column = (endPosition.getColumn() - position.getColumn());
+		double slope = Math.abs(row / column);
 		
-		if((Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) < .5001
-		&& Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) > .4999)
-		|| (Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) < 2.0001
-				&& Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) > 1.9999))
+		if((slope < .5001 && slope > .4999) || (slope < 2.0001 && slope > 1.9999))
 		{
 			if(chessBoard[endPosition.getRow()][endPosition.getColumn()] == '-')
 			{
@@ -33,10 +33,11 @@ public class Knight extends Piece{
 			Piece[] darkPieces, Piece[] lightPieces) 
 	{
 		boolean valid = false;
-		if((Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) < .5001
-		&& Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) > .4999)
-		|| (Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) < 2.0001
-				&& Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) > 1.9999))
+		double row = (endPosition.getRow() - position.getRow());
+		double column = (endPosition.getColumn() - position.getColumn());
+		double slope = Math.abs(row / column);
+		
+		if((slope < .5001 && slope > .4999) || (slope < 2.0001 && slope > 1.9999))
 		{
 			if(isDark)
 			{

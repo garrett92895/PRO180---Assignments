@@ -1,33 +1,27 @@
-package piece_movement;
+package turn_taking;
 
 public abstract class Piece {
 	protected char pieceChar;
-	protected boolean isDark;
+	protected int colorModifier;
 	protected Position position;
 	protected int moveCount;
 	protected final double UPPER_BOUND = 1.001;
 	protected final double LOWER_BOUND = .9999;
 	
-	public Piece(boolean isDark, Position position, char pieceChar)
+	public Piece(int isDark, Position position, char pieceChar)
 	{
-		this.isDark = isDark;
+		this.colorModifier = isDark;
 		this.position = position;
 		this.pieceChar = pieceChar;
 		moveCount = 0;
 	}
 	
-	public boolean moveIsClear(Position endPosition, char[][] chessBoard, Piece[] darkPieces, Piece[] lightPieces)
+	public boolean moveIsClear(Position endPosition, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces)
 	{
 		boolean isClear = false;
 		
 		if(position.compareTo(endPosition) != 0)
 		{
-			if(position.getRow() >= 0 && position.getRow() < chessBoard.length
-					&& position.getColumn() >= 0 && position.getColumn() < chessBoard.length
-					&& endPosition.getRow() >= 0 && endPosition.getRow() < chessBoard.length
-					&& endPosition.getColumn() >= 0 && endPosition.getColumn() < chessBoard.length)
-			{
-
 				if(position.getRow() == endPosition.getRow())
 				{
 					boolean pathingStop = false;
@@ -97,12 +91,11 @@ public abstract class Piece {
 							}
 					}
 				}
-			}
 		}
 		
 		return isClear;
 	}
-	public boolean captureIsClear(Position endPosition, char[][] chessBoard, Piece[] darkPieces, Piece[] lightPieces)
+	public boolean captureIsClear(Position endPosition, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces)
 	{
 		boolean isClear = false;
 		
@@ -127,7 +120,7 @@ public abstract class Piece {
 							
 							if(pathPosition.compareTo(endPosition) == 0)
 							{
-								if(isDark)
+								if(colorModifier)
 								{
 									for(int i = 0; i < lightPieces.length; i++)
 									{
@@ -199,7 +192,7 @@ public abstract class Piece {
 						
 							if(pathPosition.compareTo(endPosition) == 0)
 							{
-								if(isDark)
+								if(colorModifier)
 								{
 									for(int i = 0; i < lightPieces.length; i++)
 									{
@@ -238,15 +231,15 @@ public abstract class Piece {
 		
 		return isClear;
 	}
-	public abstract boolean moveIsValid(Position endPosition, char[][] chessBoard, Piece[] darkPieces, Piece[] lightPieces);
-	public abstract boolean captureIsValid(Position endPosition, char[][] chessBoard, Piece[] darkPieces, Piece[] lightPieces);
+	public abstract boolean moveIsValid(Position endPosition, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces);
+	public abstract boolean captureIsValid(Position endPosition, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces);
 
-	public boolean isDark() {
-		return isDark;
+	public int getColorModifier() {
+		return colorModifier;
 	}
 
-	public void setDark(boolean isDark) {
-		this.isDark = isDark;
+	public void setColorModifier(int isDark) {
+		this.colorModifier = isDark;
 	}
 
 	public Position getPosition() {

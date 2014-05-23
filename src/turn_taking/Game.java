@@ -1,30 +1,15 @@
-package piece_movement;
+package turn_taking;
 
 /**
  * @author Garrett Holbrook
  *
  */
 public class Game {
-	private final int BOARD_SIZE = 8;
 	private final int NUM_OF_PIECES = 16;
 	private final PieceMap PIECE_MAP = new PieceMap();
-	private char[][] chessBoard = new char[BOARD_SIZE][BOARD_SIZE];
+	private ChessBoard chessBoard = new ChessBoard();
 	private Piece[] darkPieces = new Piece[NUM_OF_PIECES];
 	private Piece[] lightPieces = new Piece[NUM_OF_PIECES];
-	
-	/**Constructs the game object and fills the chessBoard with '-'
-	 * 
-	 */
-	public Game()
-	{
-		for(int i = 0; i < chessBoard.length; i++)
-		{
-			for(int x = 0; x < chessBoard[i].length; x++)
-			{
-				chessBoard[i][x] = '-';
-			}
-		}
-	}
 	
 	/**
 	 * Executes a directive by determining what sort of move it is and then
