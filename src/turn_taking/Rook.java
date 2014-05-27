@@ -2,7 +2,7 @@ package turn_taking;
 
 public class Rook extends Piece{
 
-	public Rook(boolean isDark, Position position) 
+	public Rook(int isDark, Position position) 
 	{
 		super(isDark, position, 'r');
 	}

@@ -13,20 +13,12 @@ public class King extends Piece{
 	{
 		boolean valid = false;
 		
-		if((Math.abs(endPosition.getRow() - position.getRow() + 1) == 0		//If the desired position is 1 row or less away from the current position
-				|| endPosition.getRow() == position.getRow() - 1
-				|| endPosition.getRow() == position.getRow())
-				&&
-				(endPosition.getColumn() == position.getColumn() + 1	
-				|| endPosition.getColumn() == position.getColumn() - 1
-				|| endPosition.getColumn() == position.getColumn())) 
+		if(Math.abs(endPosition.getRow() - position.getRow()) <= 1 
+				&& Math.abs(endPosition.getColumn() - position.getColumn()) <= 1
+				&& chessBoard.hasPieceOnPosition(endPosition) == 0)
 		{
-			int hasPiece = chessBoard.hasPieceOnPosition(endPosition);
-			if(hasPiece == 0)
-			{
 				valid = true;
 				moveCount++;
-			}
 		}
 		return valid;
 	}
@@ -37,48 +29,13 @@ public class King extends Piece{
 	{
 		boolean valid = false;
 		
-		if((endPosition.getRow() == position.getRow() + 1		//If the desired position is 1 row or less away from the current position
-				|| endPosition.getRow() == position.getRow() - 1
-				|| endPosition.getRow() == position.getRow()) 
-				&& endPosition.getRow() < chessBoard.length)
+		if(Math.abs(endPosition.getRow() - position.getRow()) <= 1 					//If the desired position is 1 row or less away from the current position
+				&& Math.abs(endPosition.getColumn() - position.getColumn()) <= 1	//If the desired position is 1 column or less away from the current position
+				&& chessBoard.hasPieceOnPosition(endPosition) == (colorModifier * -1))
 		{
-			if((endPosition.getColumn() == position.getColumn() + 1		//If the desired position is 1 column or less away from the current position
-					|| endPosition.getColumn() == position.getColumn() - 1
-					|| endPosition.getColumn() == position.getColumn()) 
-					&& endPosition.getColumn() < chessBoard.length)
-			{
-				boolean hasOpposingPiece = false;
-				for(int i = 0; i < darkPieces.length; i++)				//Checks to see if there are any pieces on the desired position already
-				{														//and if so, determines whether or not it is a piece of the enemy's color
-					if(darkPieces[i] != null)
-					{
-						if(darkPieces[i].getPosition().getRow() == endPosition.getRow()
-								&& darkPieces[i].getPosition().getColumn() == endPosition.getColumn())
-						{
-							if(!colorModifier)
-							{
-								hasOpposingPiece = true;
-							}
-						}
-					}
-					if(lightPieces[i] != null)
-					{
-						if(lightPieces[i].getPosition().getRow() == endPosition.getRow()
-								&& lightPieces[i].getPosition().getColumn() == endPosition.getColumn())
-						{
-							if(colorModifier)
-							{
-								hasOpposingPiece = true;
-							}
-						}
-					}
-				}
-				
-				if(hasOpposingPiece)
-				{
+			{				
 					valid = true;
 					moveCount++;
-				}
 			}
 		}
 		return valid;
@@ -88,34 +45,27 @@ public class King extends Piece{
 			Piece[] darkPieces, Piece[] lightPieces)
 	{
 		boolean valid = false;
+		int correctRow;
 		
-		if(moveCount == 0)
+		if(colorModifier == 1)
 		{
-			if(colorModifier)
-			{
-				if(endPosition.getRow() == 0)
-				{
-					if(endPosition.getColumn() == 6 || endPosition.getColumn() == 2)
-					{
-						valid = moveIsClear(endPosition, chessBoard, darkPieces, lightPieces);
-					}
-				}
-			}
-			else if(!colorModifier)
-			{
-				if(endPosition.getRow() == 7)
-				{
-					if(endPosition.getColumn() == 6 || endPosition.getColumn() == 2)
-					{
-						valid = moveIsClear(endPosition, chessBoard, darkPieces, lightPieces);
-					}
-				}
-			}
-		}	
-		if(valid)
-		{
-			moveCount++;
+			correctRow = 0;
 		}
+		else
+		{
+			correctRow = 7;
+		}
+		
+		if(moveCount == 0 && (endPosition.getColumn() == 6 || endPosition.getColumn() == 2)
+				&& endPosition.getRow() == correctRow)
+		{
+			valid = true;
+		}	
+		else
+		{
+			System.err.println("INVALID: Problem castling king.");
+		}
+
 		
 		return valid;
 	}
