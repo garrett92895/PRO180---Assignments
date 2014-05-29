@@ -11,6 +11,13 @@ public class PlaceDirective extends Directive{
 		this.pieceType = pieceType;
 	}
 	
+	@Override
+	public void execute(ChessBoard chessBoard, Piece[] darkPieces,
+			Piece[] lightPieces) 
+	{
+		
+	}
+	
 	public char getPieceType()
 	{
 		return pieceType;
@@ -20,4 +27,6 @@ public class PlaceDirective extends Directive{
 	{
 		return pieceColor;
 	}
+
+
 }

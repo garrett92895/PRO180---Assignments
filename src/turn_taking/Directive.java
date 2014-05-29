@@ -1,6 +1,6 @@
 package turn_taking;
 
-public class Directive {
+public abstract class Directive {
 	private int row1;
 	private int column1;
 	
@@ -9,6 +9,8 @@ public class Directive {
 		this.row1 = row1;
 		this.column1 = column1;
 	}
+	
+	public abstract void execute(ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces);
 	
 	public int getRow1() {
 		return row1;
