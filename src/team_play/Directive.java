@@ -1,4 +1,4 @@
-package detecting_check;
+package team_play;
 
 public abstract class Directive {
 	protected int row1;
@@ -63,7 +63,7 @@ public abstract class Directive {
 	public Piece findPiece(char pieceType, int isDark, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces)
 	{
 		Piece piece = null;
-		Piece[] dangerPieces = (isDark == 1 ? lightPieces : darkPieces);
+		Piece[] dangerPieces = (isDark == 1 ? darkPieces : lightPieces);
 		
 		for(Piece p : dangerPieces)
 		{
@@ -86,7 +86,7 @@ public abstract class Directive {
 		king = (King) findPiece('k', isDark, chessBoard, darkPieces, lightPieces);
 		Piece[] dangerPieces = (isDark == 1 ? lightPieces : darkPieces);
 			
-		for(int i = 0; i < lightPieces.length; i++)
+		for(int i = 0; i < dangerPieces.length; i++)
 		{
 			if(dangerPieces[i].captureIsValid(new Position(king.getPosition().getRow(), king.getPosition().getColumn()), chessBoard, darkPieces, lightPieces))
 			{

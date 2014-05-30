@@ -75,7 +75,7 @@ public class MoveDirective extends Directive{
 						else
 						{
 							piece.setPosition(new Position(row1, column1));
-							errorMessage += "INVALID: Cannot put king in check";
+							errorMessage += "INVALID: King in check";
 						}
 				}
 				else if(piece.moveIsValid(new Position(row2, column2), chessBoard, darkPieces, lightPieces))
@@ -95,7 +95,7 @@ public class MoveDirective extends Directive{
 					else
 					{
 						piece.setPosition(new Position(row1, column1));
-						errorMessage += "INVALID: Cannot put king in check";
+						errorMessage += "INVALID: King in check";
 					}
 				}	
 				else

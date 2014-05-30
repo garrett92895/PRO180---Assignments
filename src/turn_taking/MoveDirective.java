@@ -24,4 +24,9 @@ public class MoveDirective extends Directive{
 	public boolean isCapture() {
 		return isCapture;
 	}
+
+	@Override
+	public void execute(ChessBoard chessBoard, Piece[] darkPieces,
+			Piece[] lightPieces) {
+	}
 }
