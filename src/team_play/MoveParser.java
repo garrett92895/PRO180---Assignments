@@ -17,14 +17,13 @@ public class MoveParser {
 					Character.getNumericValue(chessMoves[0].charAt(3)));
 			break;
 		case 2:
-			if(!chessMoves[1].endsWith("*"))
+			if(chessMoves[1].endsWith("*"))
 			{
-				returnDirective = new MoveDirective(
+				returnDirective = new CaptureDirective(
 						chessMoves[0].charAt(0) - 'a',
 						Character.getNumericValue(chessMoves[0].charAt(1)),
 						chessMoves[1].charAt(0) - 'a',
-						Character.getNumericValue(chessMoves[1].charAt(1)),
-						false);
+						Character.getNumericValue(chessMoves[1].charAt(1)));
 			}
 			else
 			{
@@ -32,8 +31,7 @@ public class MoveParser {
 						chessMoves[0].charAt(0) - 'a',
 						Character.getNumericValue(chessMoves[0].charAt(1)),
 						chessMoves[1].charAt(0) - 'a',
-						Character.getNumericValue(chessMoves[1].charAt(1)),
-						true);
+						Character.getNumericValue(chessMoves[1].charAt(1)));
 			}
 			break;
 		case 4:
@@ -46,9 +44,7 @@ public class MoveParser {
 							chessMoves[2].charAt(0) - 'a',
 							Character.getNumericValue(chessMoves[2].charAt(1)),
 							chessMoves[3].charAt(0) - 'a',
-							Character.getNumericValue(chessMoves[3].charAt(1)),
-							false
-							)
+							Character.getNumericValue(chessMoves[3].charAt(1)))
 					);
 		}
 		return returnDirective;

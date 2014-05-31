@@ -17,22 +17,11 @@ public class MoveDirective extends Directive{
 	{
 		Piece piece = findPiece(new Position(row1, column1), chessBoard, darkPieces, lightPieces);
 		String errorMessage = "";
-		boolean rightTurn = false;
 		boolean successfulExecution = false;
 		
 		if(piece != null)
 		{
-			int turnNum = darkTurn ? 1 : -1;
-			if(turnNum == piece.getColorModifier())
-			{
-				rightTurn = true;
-			}
-			else
-			{
-				errorMessage += "INVALID: Not the right player's turn\n";
-			}
-			
-			if(rightTurn)
+			if(isRightTurn(darkTurn, piece))
 			{
 				if(piece.moveIsValid(new Position(row2, column2), chessBoard, darkPieces, lightPieces))
 				{
@@ -58,6 +47,10 @@ public class MoveDirective extends Directive{
 				{
 					errorMessage += "INVALID: Move is not valid for that piece";
 				}
+			}
+			else
+			{
+				errorMessage += "INVALID: Not the right player's turn";
 			}
 		}
 		else

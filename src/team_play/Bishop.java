@@ -15,7 +15,7 @@ public class Bishop extends Piece{
 		if(Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) < UPPER_BOUND
 		&& Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) > LOWER_BOUND)
 		{
-			valid = moveIsClear(endPosition, chessBoard, darkPieces, lightPieces);
+			valid = moveIsClear(endPosition, chessBoard);
 		}
 		
 		return valid;

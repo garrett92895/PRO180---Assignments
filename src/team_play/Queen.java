@@ -9,7 +9,7 @@ public class Queen extends Piece{
 
 	@Override
 	public boolean moveIsValid(Position endPosition, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces) {
-		return moveIsClear(endPosition, chessBoard, darkPieces, lightPieces);
+		return moveIsClear(endPosition, chessBoard);
 	}
 
 	@Override

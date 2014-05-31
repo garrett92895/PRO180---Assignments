@@ -20,34 +20,21 @@ public class CastleDirective extends MoveDirective{
 		{
 			isDark = 1;
 		}
-		
-		boolean rightTurn = false;
-		if(darkTurn && isDark == 1)
-		{
-			rightTurn = true;
-		}
-		else if(!darkTurn && isDark == -1)
-		{
-			rightTurn = true;
-		}
-		else
-		{
-			errorMessage += "INVALID: Not the right player's turn\n";
-		}
 
 		Piece tempPiece1 = findPiece('k', isDark, chessBoard, lightPieces, lightPieces);
 		Piece tempPiece2 = findPiece(new Position(rookMove.getRow1(), rookMove.getColumn1()), chessBoard, lightPieces, lightPieces);
 		King king = null;
 		Rook rook = null;
-		if(tempPiece1 instanceof King && tempPiece2 instanceof Rook && rightTurn)
+		
+		if(tempPiece1 instanceof King && tempPiece2 instanceof Rook && isRightTurn(darkTurn, king))
 		{
 			king = (King) tempPiece1;
 			rook = (Rook) tempPiece2;
-			if(rook.getMoveCount() == 0)
+			if(rook.getMoveCount() == 0 && king.getMoveCount() == 0)
 			{
 				if(king.castleIsValid(new Position(row2, column2), chessBoard, darkPieces, lightPieces)
 						&& rook.moveIsClear(new Position(rookMove.getRow2(), rookMove.getColumn2()),
-								chessBoard, darkPieces, lightPieces))
+								chessBoard))
 				{
 					king.setPosition(new Position(row2, column2));
 					rook.setPosition(new Position(rookMove.getRow2(), rookMove.getColumn2()));

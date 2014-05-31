@@ -88,12 +88,26 @@ public abstract class Directive {
 			
 		for(int i = 0; i < dangerPieces.length; i++)
 		{
-			if(dangerPieces[i].captureIsValid(new Position(king.getPosition().getRow(), king.getPosition().getColumn()), chessBoard, darkPieces, lightPieces))
+			if(dangerPieces[i] != null &&
+					dangerPieces[i].captureIsValid(new Position(king.getPosition().getRow(), king.getPosition().getColumn()), chessBoard, darkPieces, lightPieces))
 			{
 				valid = true;
 			}
 		}
 	
+		return valid;
+	}
+	
+	public boolean isRightTurn(boolean darkTurn, Piece piece)
+	{
+		boolean valid = false;
+		
+		int turnNum = darkTurn ? 1 : -1;
+		if(turnNum == piece.getColorModifier())
+		{
+			valid = true;
+		}
+		
 		return valid;
 	}
 	

@@ -13,27 +13,17 @@ public class CaptureDirective extends MoveDirective{
 	{
 		Piece piece = findPiece(new Position(row1, column1), chessBoard, darkPieces, lightPieces);
 		String errorMessage = "";
-		boolean rightTurn = false;
 		boolean successfulExecution = false;
 		
 		if(piece != null)
 		{
-			int turnNum = darkTurn ? 1 : -1;
-			if(turnNum == piece.getColorModifier())
-			{
-				rightTurn = true;
-			}
-			else
-			{
-				errorMessage += "INVALID: Not the right player's turn\n";
-			}
-			if(rightTurn)
+			if(isRightTurn(darkTurn, piece))
 			{
 				if(piece.captureIsValid(new Position(row2, column2), chessBoard, darkPieces, lightPieces))
 				{
 						Piece enemyPiece = findPiece(new Position(row2, column2), chessBoard, darkPieces, lightPieces);
 						piece.setPosition(new Position(row2, column2));
-						Piece[] dangerPieces = (piece.getColorModifier() == 1) ? darkPieces : lightPieces;
+						Piece[] dangerPieces = (enemyPiece.getColorModifier() == 1) ? darkPieces : lightPieces;
 						
 						if(!isInCheck(piece.getColorModifier(), chessBoard, darkPieces, lightPieces))
 						{
@@ -55,7 +45,6 @@ public class CaptureDirective extends MoveDirective{
 								}
 							}
 							updateBoard(chessBoard, darkPieces, lightPieces);
-							System.out.println(toString());
 						}
 						else
 						{
@@ -67,6 +56,10 @@ public class CaptureDirective extends MoveDirective{
 				{
 					errorMessage += "INVALID: Move is not valid for that piece";
 				}
+			}
+			else
+			{
+				errorMessage += "INVALID: Not the right player's turn\n";
 			}
 		}
 		else

@@ -14,7 +14,7 @@ public class Rook extends Piece{
 		if(endPosition.getColumn() == position.getColumn()
 				|| endPosition.getRow() == position.getRow())
 		{
-			valid = moveIsClear(endPosition, chessBoard, darkPieces, lightPieces);
+			valid = moveIsClear(endPosition, chessBoard);
 		}
 		return valid;
 	}
