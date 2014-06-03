@@ -43,8 +43,8 @@ public class CaptureDirective extends MoveDirective{
 						if(!isInCheck(piece.getColorModifier(), chessBoard, darkPieces, lightPieces))
 						{
 							System.out.println(PieceMap.returnPiece(piece.getPieceChar()) + " from " +
-									column + row + " capturing " + PieceMap.returnPiece(enemyPiece.getPieceChar()) + " on " +
-									(char)(enemyPiece.getPosition().getColumn() + 'A') + (enemyPiece.getPosition().getRow() + 1));
+									column + Math.abs(row - 9) + " capturing " + PieceMap.returnPiece(enemyPiece.getPieceChar()) + " on " +
+									(char)(enemyPiece.getPosition().getColumn() + 'A') + (Math.abs(enemyPiece.getPosition().getRow() - 8)));
 							
 							successfulExecution = true;
 							updateBoard(chessBoard, darkPieces, lightPieces);

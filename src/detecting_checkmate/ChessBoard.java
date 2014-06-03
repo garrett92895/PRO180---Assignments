@@ -57,7 +57,7 @@ public class ChessBoard
 		String s = "    A  B  C  D  E  F  G  H\n";
 		s += "    ______________________\n";
 		for(int i = 0; i < BOARD_SIZE; i++)
-		{	s += (i + 1) + "|  ";
+		{	s += (Math.abs(i - 8)) + "|  ";
 			for(int x = 0; x < BOARD_SIZE; x++)
 			{
 				s += board[i][x];

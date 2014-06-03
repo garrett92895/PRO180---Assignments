@@ -8,8 +8,8 @@ public class MoveDirective extends Directive{
 	
 	public MoveDirective(int column1, int row1, int column2, int row2)
 	{
-		super(column1, row1 - 1);
-		this.row2 = row2 - 1;
+		super(column1, row1);
+		this.row2 = row2;
 		this.column2 = column2;
 	}
 	
@@ -32,9 +32,9 @@ public class MoveDirective extends Directive{
 					if(!isInCheck(piece.getColorModifier(), chessBoard, darkPieces, lightPieces))
 					{
 					System.out.println(PieceMap.returnPiece(piece.getPieceChar()) + " from " +
-							(char)(column1 + 'A') + (row1 + 1)
+							(char)(column1 + 'A') + (Math.abs(row1 - 8))
 							+ " to " +
-							(char)(column2 + 'A') + (row2 + 1));
+							(char)(column2 + 'A') + (Math.abs(row2 - 8)));
 
 					successfulExecution = true;
 					updateBoard(chessBoard, darkPieces, lightPieces);
