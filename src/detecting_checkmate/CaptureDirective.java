@@ -77,7 +77,20 @@ public class CaptureDirective extends MoveDirective{
 			
 			char color = (king.getColorModifier() == 1) ? 'd' : 'l';
 			if(king.isInCheck())
-			System.out.println(PieceMap.returnPiece(color) + " King in check");
+			{
+				if(checkMate(king.getColorModifier(), chessBoard, darkPieces, lightPieces))
+				{
+					System.out.println("Check mate");
+					updateBoard(chessBoard, darkPieces, lightPieces);
+					System.out.println(chessBoard);
+					System.exit(0);
+				}
+				else
+				{
+					System.out.println(PieceMap.returnPiece(color) + " King in check");
+				}
+			}
+
 		}
 		if(!errorMessage.equals(""))
 			System.err.println(errorMessage);
