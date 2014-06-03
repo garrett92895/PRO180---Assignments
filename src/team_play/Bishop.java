@@ -1,5 +1,7 @@
 package team_play;
 
+import java.util.ArrayList;
+
 public class Bishop extends Piece{
 
 	public Bishop(int isDark, Position position) 
@@ -9,7 +11,7 @@ public class Bishop extends Piece{
 	}
 
 	@Override
-	public boolean moveIsValid(Position endPosition, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces) 
+	public boolean moveIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) 
 	{
 		boolean valid = false;
 		if(Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) < UPPER_BOUND
@@ -22,10 +24,11 @@ public class Bishop extends Piece{
 	}
 
 	@Override
-	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces) 
+	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) 
 	{
 		boolean valid = false;
-		if(Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) < UPPER_BOUND
+		if(position.getColumn() - endPosition.getColumn() != 0
+		&& Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) < UPPER_BOUND
 		&& Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) > LOWER_BOUND)
 		{
 			valid = captureIsClear(endPosition, chessBoard, darkPieces, lightPieces);

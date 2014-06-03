@@ -1,5 +1,7 @@
 package team_play;
 
+import java.util.ArrayList;
+
 public class MoveDirective extends Directive{
 	protected int row2;
 	protected int column2;
@@ -12,8 +14,8 @@ public class MoveDirective extends Directive{
 	}
 	
 	@Override
-	public boolean execute(ChessBoard chessBoard, Piece[] darkPieces,
-			Piece[] lightPieces, boolean darkTurn) 
+	public boolean execute(ChessBoard chessBoard, ArrayList<Piece> darkPieces,
+			ArrayList<Piece> lightPieces, boolean darkTurn) 
 	{
 		Piece piece = findPiece(new Position(row1, column1), chessBoard, darkPieces, lightPieces);
 		String errorMessage = "";
@@ -40,7 +42,7 @@ public class MoveDirective extends Directive{
 					else
 					{
 						piece.setPosition(new Position(row1, column1));
-						errorMessage += "INVALID: King in check";
+						errorMessage += "INVALID: Your " + PieceMap.returnPiece(piece.getColorModifier()) + " King would be in check";
 					}
 				}	
 				else
@@ -57,7 +59,17 @@ public class MoveDirective extends Directive{
 		{
 			errorMessage += "INVALID: No piece found on starting position\n";
 		}
-		System.err.println(errorMessage);
+		if(successfulExecution)
+		{
+			King king = (King) findPiece('k', piece.getColorModifier() * -1, chessBoard, darkPieces, lightPieces);
+			king.setInCheck(isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces));
+			
+			char color = (king.getColorModifier() == 1) ? 'd' : 'l';
+			if(king.isInCheck())
+			System.out.println(PieceMap.returnPiece(color) + " King in check");
+		}
+		if(!errorMessage.equals(""))
+			System.err.println(errorMessage);
 		return successfulExecution;
 	}
 

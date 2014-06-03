@@ -1,15 +1,20 @@
 package team_play;
 
+import java.util.ArrayList;
+
 public class King extends Piece{
 
+	private boolean isInCheck;
+	
 	public King(int isDark, Position position) 
 	{
 		super(isDark, position, 'k');
+		setInCheck(false);
 	}
 
 	@Override
 	public boolean moveIsValid(Position endPosition, ChessBoard chessBoard,
-			Piece[] darkPieces, Piece[] lightPieces) 
+			ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) 
 	{
 		boolean valid = false;
 		
@@ -25,7 +30,7 @@ public class King extends Piece{
 
 	@Override
 	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard,
-			Piece[] darkPieces, Piece[] lightPieces) 
+			ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) 
 	{
 		boolean valid = false;
 		
@@ -42,7 +47,7 @@ public class King extends Piece{
 	}
 	
 	public boolean castleIsValid(Position endPosition, ChessBoard chessBoard,
-			Piece[] darkPieces, Piece[] lightPieces)
+			ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		boolean valid = false;
 		int correctRow;
@@ -68,6 +73,14 @@ public class King extends Piece{
 
 		
 		return valid;
+	}
+
+	public boolean isInCheck() {
+		return isInCheck;
+	}
+
+	public void setInCheck(boolean isInCheck) {
+		this.isInCheck = isInCheck;
 	}
 
 }

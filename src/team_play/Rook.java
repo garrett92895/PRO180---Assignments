@@ -1,5 +1,7 @@
 package team_play;
 
+import java.util.ArrayList;
+
 public class Rook extends Piece{
 
 	public Rook(int isDark, Position position) 
@@ -8,7 +10,7 @@ public class Rook extends Piece{
 	}
 
 	@Override
-	public boolean moveIsValid(Position endPosition, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces) 
+	public boolean moveIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) 
 	{
 		boolean valid = false;
 		if(endPosition.getColumn() == position.getColumn()
@@ -20,7 +22,7 @@ public class Rook extends Piece{
 	}
 
 	@Override
-	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces) 
+	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) 
 	{
 		boolean valid = false;
 		if(endPosition.getColumn() == position.getColumn()

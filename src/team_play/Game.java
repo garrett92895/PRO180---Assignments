@@ -1,5 +1,7 @@
 package team_play;
 
+import java.util.ArrayList;
+
 /**
  * @author Garrett Holbrook
  *
@@ -8,8 +10,8 @@ public class Game {
 	private final int NUM_OF_PIECES = 16;
 	private final PieceMap PIECE_MAP = new PieceMap();
 	private ChessBoard chessBoard = new ChessBoard();
-	private Piece[] darkPieces = new Piece[NUM_OF_PIECES];
-	private Piece[] lightPieces = new Piece[NUM_OF_PIECES];
+	private ArrayList<Piece> darkPieces = new ArrayList<Piece>();
+	private ArrayList<Piece> lightPieces = new ArrayList<Piece>();
 	private boolean darkTurn;
 	
 	public Game()

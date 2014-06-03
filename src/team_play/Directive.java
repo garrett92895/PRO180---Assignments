@@ -1,5 +1,7 @@
 package team_play;
 
+import java.util.ArrayList;
+
 public abstract class Directive {
 	protected int row1;
 	protected int column1;
@@ -10,9 +12,9 @@ public abstract class Directive {
 		this.column1 = column1;
 	}
 	
-	public abstract boolean execute(ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces, boolean darkTurn);
+	public abstract boolean execute(ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces, boolean darkTurn);
 	
-	public void updateBoard(ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces)
+	public void updateBoard(ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		for(int i = 0; i < chessBoard.BOARD_SIZE; i++)
 		{
@@ -35,35 +37,32 @@ public abstract class Directive {
 		}
 	}
 	
-	public Piece findPiece(Position position, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces)
+	public Piece findPiece(Position position, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		Piece returnPiece = null;
 		
-		for(int i = 0; i < darkPieces.length; i++)
+		for(int i = 0; i < darkPieces.size(); i++)
 		{
-			if(darkPieces[i] != null)
-			{
-				if(darkPieces[i].getPosition().compareTo(position) == 0)
+				if(darkPieces.get(i).getPosition().compareTo(position) == 0)
 				{
-					returnPiece = darkPieces[i];
+					returnPiece = darkPieces.get(i);
 				}
-			}
-			if(lightPieces[i] != null)
-			{
-				if(lightPieces[i].getPosition().compareTo(position) == 0)
+		}
+		for(int i = 0; i < lightPieces.size(); i++)
+		{
+				if(lightPieces.get(i).getPosition().compareTo(position) == 0)
 				{
-					returnPiece = lightPieces[i];
+					returnPiece = lightPieces.get(i);
 				}
-			}
 		}
 		
 		return returnPiece;
 	}
 	
-	public Piece findPiece(char pieceType, int isDark, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces)
+	public Piece findPiece(char pieceType, int isDark, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		Piece piece = null;
-		Piece[] dangerPieces = (isDark == 1 ? darkPieces : lightPieces);
+		ArrayList<Piece> dangerPieces = (isDark == 1 ? darkPieces : lightPieces);
 		
 		for(Piece p : dangerPieces)
 		{
@@ -79,17 +78,17 @@ public abstract class Directive {
 		return piece;
 	}
 	
-	public boolean isInCheck(int isDark, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces)
+	public boolean isInCheck(int isDark, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		boolean valid = false;
 		King king = null;
 		king = (King) findPiece('k', isDark, chessBoard, darkPieces, lightPieces);
-		Piece[] dangerPieces = (isDark == 1 ? lightPieces : darkPieces);
+		ArrayList<Piece> dangerPieces = (isDark == 1 ? lightPieces : darkPieces);
 			
-		for(int i = 0; i < dangerPieces.length; i++)
+		for(int i = 0; i < dangerPieces.size(); i++)
 		{
-			if(dangerPieces[i] != null &&
-					dangerPieces[i].captureIsValid(new Position(king.getPosition().getRow(), king.getPosition().getColumn()), chessBoard, darkPieces, lightPieces))
+			if(dangerPieces.get(i) != null &&
+					dangerPieces.get(i).captureIsValid(new Position(king.getPosition().getRow(), king.getPosition().getColumn()), chessBoard, darkPieces, lightPieces))
 			{
 				valid = true;
 			}
@@ -103,7 +102,7 @@ public abstract class Directive {
 		boolean valid = false;
 		
 		int turnNum = darkTurn ? 1 : -1;
-		if(turnNum == piece.getColorModifier())
+		if(piece != null && turnNum == piece.getColorModifier())
 		{
 			valid = true;
 		}

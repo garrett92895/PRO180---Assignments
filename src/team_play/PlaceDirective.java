@@ -1,5 +1,7 @@
 package team_play;
 
+import java.util.ArrayList;
+
 public class PlaceDirective extends Directive{
 	private char pieceType;
 	private char pieceColor;
@@ -12,37 +14,15 @@ public class PlaceDirective extends Directive{
 	}
 	
 	@Override
-	public boolean execute(ChessBoard chessBoard, Piece[] darkPieces,
-			Piece[] lightPieces, boolean darkTurn) 
+	public boolean execute(ChessBoard chessBoard, ArrayList<Piece> darkPieces,
+			ArrayList<Piece> lightPieces, boolean darkTurn) 
 	{
-		int index = -1;
 		int isDark = 0;
 		boolean successfulExecution = false;
+		ArrayList<Piece> pieces = (pieceColor == 'l') ? lightPieces : darkPieces;
+		isDark = (pieceColor == 'l') ? -1 : 1;
 		
-		if(pieceColor == 'l')
-		{
-			isDark = -1;
-			for(int i = lightPieces.length - 1; i >= 0; i-- )
-			{
-				if(lightPieces[i] == null)
-				{
-					index = i;
-				}
-			}
-		}
-		else
-		{
-			isDark = 1;
-			for(int i = darkPieces.length - 1; i >= 0; i-- )
-			{
-				if(darkPieces[i] == null)
-				{
-					index = i;
-				}
-			}
-		}
-		
-		if(index >= 0)
+		if(pieces.size() <= 16)
 		{
 			Piece tempPiece = null;
 			switch(pieceType)
@@ -69,14 +49,7 @@ public class PlaceDirective extends Directive{
 			
 			tempPiece.setPosition(new Position(row1, column1));
 			
-			if(isDark == 1)
-			{
-				darkPieces[index] = tempPiece;
-			}
-			else
-			{
-				lightPieces[index] = tempPiece;
-			}
+			pieces.add(tempPiece);
 			
 			System.out.println("Placing " + PieceMap.returnPiece(pieceType) + " on "
 					+ (char)(tempPiece.getPosition().getColumn() + 'A') + (tempPiece.getPosition().getRow() + 1));

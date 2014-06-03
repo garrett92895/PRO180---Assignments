@@ -1,5 +1,7 @@
 package team_play;
 
+import java.util.ArrayList;
+
 public class CastleDirective extends MoveDirective{
 	private MoveDirective rookMove;
 	
@@ -10,7 +12,7 @@ public class CastleDirective extends MoveDirective{
 	}
 	
 	@Override
-	public boolean execute(ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces, boolean darkTurn)
+	public boolean execute(ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces, boolean darkTurn)
 	{
 		int isDark = -1;
 		String errorMessage = "";
@@ -21,12 +23,12 @@ public class CastleDirective extends MoveDirective{
 			isDark = 1;
 		}
 
-		Piece tempPiece1 = findPiece('k', isDark, chessBoard, lightPieces, lightPieces);
-		Piece tempPiece2 = findPiece(new Position(rookMove.getRow1(), rookMove.getColumn1()), chessBoard, lightPieces, lightPieces);
+		Piece tempPiece1 = findPiece('k', isDark, chessBoard, darkPieces, lightPieces);
+		Piece tempPiece2 = findPiece(new Position(rookMove.getRow1(), rookMove.getColumn1()), chessBoard, darkPieces, lightPieces);
 		King king = null;
 		Rook rook = null;
 		
-		if(tempPiece1 instanceof King && tempPiece2 instanceof Rook && isRightTurn(darkTurn, king))
+		if(tempPiece1 instanceof King && tempPiece2 instanceof Rook && isRightTurn(darkTurn, tempPiece1))
 		{
 			king = (King) tempPiece1;
 			rook = (Rook) tempPiece2;
@@ -43,7 +45,7 @@ public class CastleDirective extends MoveDirective{
 					
 					System.out.println("Castled King to " + (char)(king.getPosition().getColumn() + 'A') + (king.getPosition().getRow() + 1)
 							+ " and Rook to " + (char)(rook.getPosition().getColumn() + 'A') + (rook.getPosition().getRow() + 1));
-					updateBoard(chessBoard, lightPieces, lightPieces);
+					updateBoard(chessBoard, darkPieces, lightPieces);
 					successfulExecution = true;
 				}
 				else
@@ -61,7 +63,12 @@ public class CastleDirective extends MoveDirective{
 			errorMessage += "INVALID: Might be attempting to castle pieces that aren't the rook or the king\n";
 		}
 		
-		System.err.println("Error while castling...\n" + errorMessage);
+		if(!errorMessage.equals(""))
+			System.err.println(errorMessage);
+		if(!successfulExecution)
+		{
+			System.err.println("Error while castling...\n" + errorMessage);
+		}
 		return successfulExecution; 
 	}
 	

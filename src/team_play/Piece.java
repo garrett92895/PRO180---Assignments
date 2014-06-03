@@ -1,5 +1,7 @@
 package team_play;
 
+import java.util.ArrayList;
+
 public abstract class Piece {
 	protected char pieceChar;
 	protected int colorModifier;
@@ -39,11 +41,13 @@ public abstract class Piece {
 		
 		return isClear;
 	}
-	protected boolean captureIsClear(Position endPosition, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces)
+	protected boolean captureIsClear(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		boolean isClear = false;
-		Piece[] dangerPieces = (colorModifier == 1) ? lightPieces : darkPieces;
-		
+		ArrayList<Piece> dangerPieces = (colorModifier == 1) ? lightPieces : darkPieces;
+		double rise = position.getRow() - endPosition.getRow();
+		double run = position.getColumn() - endPosition.getColumn();
+		double slope = Math.abs(rise / run);
 		if(position.compareTo(endPosition) != 0)
 		{
 			if(position.getRow() == endPosition.getRow())
@@ -54,8 +58,8 @@ public abstract class Piece {
 			{
 				isClear = columnCaptureIsClear(endPosition, chessBoard, dangerPieces);
 			}
-			else if(Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) < UPPER_BOUND
-					&& Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) > LOWER_BOUND)
+			else if(slope < UPPER_BOUND
+					&& slope > LOWER_BOUND)
 			{
 				isClear = diagonalCaptureIsClear(endPosition, chessBoard, dangerPieces);
 			}
@@ -90,7 +94,7 @@ public abstract class Piece {
 		return isClear;
 		
 	}
-	protected boolean rowCaptureIsClear(Position endPosition, ChessBoard chessBoard, Piece[] dangerPieces)
+	protected boolean rowCaptureIsClear(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> dangerPieces)
 	{
 		boolean isClear = false;
 		boolean pathingStop = false;
@@ -104,11 +108,11 @@ public abstract class Piece {
 				
 				if(pathPosition.compareTo(endPosition) == 0)
 				{
-					for(int i = 0; i < dangerPieces.length; i++)
+					for(int i = 0; i < dangerPieces.size(); i++)
 					{
-						if(dangerPieces[i] != null)
+						if(dangerPieces.get(i) != null)
 						{
-							if(dangerPieces[i].getPosition().compareTo(endPosition) == 0)
+							if(dangerPieces.get(i).getPosition().compareTo(endPosition) == 0)
 							{
 								isClear = true;
 							}
@@ -134,20 +138,20 @@ public abstract class Piece {
 		while(!pathingStop)
 		{
 				pathPosition.setRow(pathPosition.getRow() + slopeRise);
-				
-				if(pathPosition.compareTo(endPosition) == 0)
+				if(chessBoard.getBoard()[pathPosition.getRow()][pathPosition.getColumn()] != '-')
+				{
+					pathingStop = true;
+				}
+				else if(pathPosition.compareTo(endPosition) == 0)
 				{
 					isClear = true;
 					pathingStop = true;
 				}
-				else if(chessBoard.getBoard()[pathPosition.getRow()][pathPosition.getColumn()] != '-')
-				{
-					pathingStop = true;
-				}
+
 		}
 		return isClear;
 	}
-	protected boolean columnCaptureIsClear(Position endPosition, ChessBoard chessBoard, Piece[] dangerPieces)
+	protected boolean columnCaptureIsClear(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> dangerPieces)
 	{
 		boolean isClear = false;
 		
@@ -162,11 +166,11 @@ public abstract class Piece {
 				
 			if(pathPosition.compareTo(endPosition) == 0)
 			{
-				for(int i = 0; i < dangerPieces.length; i++)
+				for(int i = 0; i < dangerPieces.size(); i++)
 				{
-					if(dangerPieces[i] != null)
+					if(dangerPieces.get(i) != null)
 					{
-						if(dangerPieces[i].getPosition().compareTo(endPosition) == 0)
+						if(dangerPieces.get(i).getPosition().compareTo(endPosition) == 0)
 						{
 							isClear = true;
 						}
@@ -197,20 +201,20 @@ public abstract class Piece {
 				pathPosition.setRow(pathPosition.getRow() + slopeRise); 
 				pathPosition.setColumn(pathPosition.getColumn() + slopeRun);
 			
-				if(pathPosition.compareTo(endPosition) == 0)
+				if(chessBoard.getBoard()[pathPosition.getRow()][pathPosition.getColumn()] != '-')
 				{
-					isClear = true;
 					pathingStop = true;
 				}
-				else if(chessBoard.getBoard()[pathPosition.getRow()][pathPosition.getColumn()] != '-')
-				{								
+				else if(pathPosition.compareTo(endPosition) == 0)
+				{
+					isClear = true;
 					pathingStop = true;
 				}
 		}
 		
 		return isClear;
 	}
-	protected boolean diagonalCaptureIsClear(Position endPosition, ChessBoard chessBoard, Piece[] dangerPieces)
+	protected boolean diagonalCaptureIsClear(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> dangerPieces)
 	{
 		boolean isClear = false;
 		
@@ -227,11 +231,11 @@ public abstract class Piece {
 			
 				if(pathPosition.compareTo(endPosition) == 0)
 				{
-						for(int i = 0; i < dangerPieces.length; i++)
+						for(int i = 0; i < dangerPieces.size(); i++)
 						{
-							if(dangerPieces[i] != null)
+							if(dangerPieces.get(i) != null)
 							{
-								if(dangerPieces[i].getPosition().compareTo(endPosition) == 0)
+								if(dangerPieces.get(i).getPosition().compareTo(endPosition) == 0)
 								{
 									isClear = true;
 								}
@@ -248,8 +252,8 @@ public abstract class Piece {
 		return isClear;
 	}
 	
-	public abstract boolean moveIsValid(Position endPosition, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces);
-	public abstract boolean captureIsValid(Position endPosition, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces);
+	public abstract boolean moveIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces);
+	public abstract boolean captureIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces);
 	
 	public int getColorModifier() {
 		return colorModifier;
