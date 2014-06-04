@@ -5,15 +5,15 @@ import java.util.ArrayList;
 public abstract class Directive {
 	protected int row1;
 	protected int column1;
-	
+
 	public Directive(int column1, int row1)
 	{
 		this.row1 = row1;
 		this.column1 = column1;
 	}
-	
+
 	public abstract boolean execute(ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces, boolean darkTurn);
-	
+
 	public void updateBoard(ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		for(int i = 0; i < chessBoard.BOARD_SIZE; i++)
@@ -36,34 +36,34 @@ public abstract class Directive {
 			}
 		}
 	}
-	
+
 	public Piece findPiece(Position position, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		Piece returnPiece = null;
-		
+
 		for(int i = 0; i < darkPieces.size(); i++)
 		{
-				if(darkPieces.get(i).getPosition().compareTo(position) == 0)
-				{
-					returnPiece = darkPieces.get(i);
-				}
+			if(darkPieces.get(i).getPosition().compareTo(position) == 0)
+			{
+				returnPiece = darkPieces.get(i);
+			}
 		}
 		for(int i = 0; i < lightPieces.size(); i++)
 		{
-				if(lightPieces.get(i).getPosition().compareTo(position) == 0)
-				{
-					returnPiece = lightPieces.get(i);
-				}
+			if(lightPieces.get(i).getPosition().compareTo(position) == 0)
+			{
+				returnPiece = lightPieces.get(i);
+			}
 		}
-		
+
 		return returnPiece;
 	}
-	
+
 	public Piece findPiece(char pieceType, int isDark, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		Piece piece = null;
 		ArrayList<Piece> dangerPieces = (isDark == 1 ? darkPieces : lightPieces);
-		
+
 		for(Piece p : dangerPieces)
 		{
 			if(p != null)
@@ -74,17 +74,17 @@ public abstract class Directive {
 				}
 			}
 		}
-		
+
 		return piece;
 	}
-	
+
 	public boolean isInCheck(int isDark, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		boolean valid = false;
 		King king = null;
 		king = (King) findPiece('k', isDark, chessBoard, darkPieces, lightPieces);
 		ArrayList<Piece> dangerPieces = (isDark == 1 ? lightPieces : darkPieces);
-			
+
 		for(int i = 0; i < dangerPieces.size(); i++)
 		{
 			if(dangerPieces.get(i) != null &&
@@ -93,108 +93,20 @@ public abstract class Directive {
 				valid = true;
 			}
 		}
-	
+
 		return valid;
 	}
-	
+
 	public boolean checkMate(int isDark, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		boolean checkMate = true;
-		
+
 		King king = (King) findPiece('k', isDark, chessBoard, darkPieces, lightPieces);
-		Position startingPosition = king.getPosition();
-		//Checks vertical move up one
-		if(king.moveIsValid(new Position(king.getPosition().getRow() - 1, king.getPosition().getColumn()), chessBoard, darkPieces, lightPieces))
-		{
-		king.setPosition(new Position(king.getPosition().getRow() - 1, king.getPosition().getColumn()));
-		}
-		if(!isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces))
-		{
-			checkMate = false;
-		}
-		king.setPosition(startingPosition);
-		
-		//Checks horizontal move right one
-		if(king.moveIsValid(new Position(king.getPosition().getRow(), king.getPosition().getColumn() + 1), chessBoard, darkPieces, lightPieces))
-		{
-		king.setPosition(new Position(king.getPosition().getRow(), king.getPosition().getColumn() + 1));
-		}
-		if(!isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces))
-		{
-			checkMate = false;
-		}
-		king.setPosition(startingPosition);
-		
-		//Checks vertical move down one
-		if(king.moveIsValid(new Position(king.getPosition().getRow() + 1, king.getPosition().getColumn()), chessBoard, darkPieces, lightPieces))
-		{
-		king.setPosition(new Position(king.getPosition().getRow() + 1, king.getPosition().getColumn()));
-		}
-		if(!isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces))
-		{
-			checkMate = false;
-		}
-		king.setPosition(startingPosition);
-		
-		//Checks horizontal move left one
-		if(king.moveIsValid(new Position(king.getPosition().getRow(), king.getPosition().getColumn() - 1), chessBoard, darkPieces, lightPieces))
-		{
-		king.setPosition(new Position(king.getPosition().getRow(), king.getPosition().getColumn() - 1));
-		}
-		if(!isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces))
-		{
-			checkMate = false;
-		}
-		king.setPosition(startingPosition);
-		
-		//Checks up-right
-		if(king.moveIsValid(new Position(king.getPosition().getRow() - 1, king.getPosition().getColumn() + 1), chessBoard, darkPieces, lightPieces))
-		{
-		king.setPosition(new Position(king.getPosition().getRow() - 1, king.getPosition().getColumn() + 1));
-		}
-		if(!isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces))
-		{
-			checkMate = false;
-		}
-		king.setPosition(startingPosition);
-		
-		//Checks up-left
-		if(king.moveIsValid(new Position(king.getPosition().getRow() - 1, king.getPosition().getColumn() - 1), chessBoard, darkPieces, lightPieces))
-		{
-		king.setPosition(new Position(king.getPosition().getRow() - 1, king.getPosition().getColumn() - 1));
-		}
-		if(!isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces))
-		{
-			checkMate = false;
-		}
-		king.setPosition(startingPosition);
-		
-		//Checks down-right
-		if(king.moveIsValid(new Position(king.getPosition().getRow() + 1, king.getPosition().getColumn() + 1), chessBoard, darkPieces, lightPieces))
-		{
-		king.setPosition(new Position(king.getPosition().getRow() + 1, king.getPosition().getColumn() + 1));
-		}
-		if(!isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces))
-		{
-			checkMate = false;
-		}
-		king.setPosition(startingPosition);
-		
-		//Checks down-left
-		if(king.moveIsValid(new Position(king.getPosition().getRow() + 1, king.getPosition().getColumn() - 1), chessBoard, darkPieces, lightPieces))
-		{
-		king.setPosition(new Position(king.getPosition().getRow() + 1, king.getPosition().getColumn() - 1));
-		}
-		if(!isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces))
-		{
-			checkMate = false;
-		}
-		king.setPosition(startingPosition);
-		
+
 		if(checkMate)
 		{
 			ArrayList<Piece> friendlyPieces = (king.getColorModifier() == 1) ? darkPieces : lightPieces;
-			
+
 			for(Piece p : friendlyPieces)
 			{
 				Position savedPosition = p.getPosition();
@@ -205,43 +117,47 @@ public abstract class Directive {
 						if(p.moveIsValid(new Position(i, x), chessBoard, darkPieces, lightPieces))
 						{
 							p.setPosition(new Position(i, x));
+							updateBoard(chessBoard, darkPieces, lightPieces);
 							if(!isInCheck(p.getColorModifier(), chessBoard, darkPieces, lightPieces))
 							{
 								checkMate = true;
 							}
 							p.setPosition(savedPosition);
+							updateBoard(chessBoard, darkPieces, lightPieces);
 						}
-						
+
 						if(p.captureIsValid(new Position(i, x), chessBoard, darkPieces, lightPieces))
 						{
 							p.setPosition(new Position(i, x));
+							updateBoard(chessBoard, darkPieces, lightPieces);
 							if(!isInCheck(p.getColorModifier(), chessBoard, darkPieces, lightPieces))
 							{
 								checkMate = true;
 							}
 							p.setPosition(savedPosition);
+							updateBoard(chessBoard, darkPieces, lightPieces);
 						}
 					}
 				}
 			}
 		}
-		
+
 		return checkMate;
 	}
-	
+
 	public boolean isRightTurn(boolean darkTurn, Piece piece)
 	{
 		boolean valid = false;
-		
+
 		int turnNum = darkTurn ? 1 : -1;
 		if(piece != null && turnNum == piece.getColorModifier())
 		{
 			valid = true;
 		}
-		
+
 		return valid;
 	}
-	
+
 	public int getRow1() {
 		return row1;
 	}
