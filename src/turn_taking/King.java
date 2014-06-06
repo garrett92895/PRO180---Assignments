@@ -1,21 +1,29 @@
 package turn_taking;
 
+import java.util.ArrayList;
+
 public class King extends Piece{
 
+	private boolean isInCheck;
+	
 	public King(int isDark, Position position) 
 	{
 		super(isDark, position, 'k');
+		setInCheck(false);
 	}
 
 	@Override
 	public boolean moveIsValid(Position endPosition, ChessBoard chessBoard,
-			Piece[] darkPieces, Piece[] lightPieces) 
+			ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) 
 	{
 		boolean valid = false;
+		boolean onBoard = (endPosition.getRow() >= 0 && endPosition.getRow() < chessBoard.BOARD_SIZE
+								&& endPosition.getColumn() >= 0 && endPosition.getColumn() < chessBoard.BOARD_SIZE);
 		
-		if(Math.abs(endPosition.getRow() - position.getRow()) <= 1 
+		if(onBoard && Math.abs(endPosition.getRow() - position.getRow()) <= 1 
 				&& Math.abs(endPosition.getColumn() - position.getColumn()) <= 1
-				&& chessBoard.hasPieceOnPosition(endPosition) == 0)
+				&& chessBoard.hasPieceOnPosition(endPosition) == 0
+				)
 		{
 				valid = true;
 				moveCount++;
@@ -25,11 +33,13 @@ public class King extends Piece{
 
 	@Override
 	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard,
-			Piece[] darkPieces, Piece[] lightPieces) 
+			ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) 
 	{
 		boolean valid = false;
+		boolean onBoard = (endPosition.getRow() >= 0 && endPosition.getRow() < chessBoard.BOARD_SIZE
+				&& endPosition.getColumn() >= 0 && endPosition.getColumn() < chessBoard.BOARD_SIZE);
 		
-		if(Math.abs(endPosition.getRow() - position.getRow()) <= 1 					//If the desired position is 1 row or less away from the current position
+		if(onBoard && Math.abs(endPosition.getRow() - position.getRow()) <= 1 					//If the desired position is 1 row or less away from the current position
 				&& Math.abs(endPosition.getColumn() - position.getColumn()) <= 1	//If the desired position is 1 column or less away from the current position
 				&& chessBoard.hasPieceOnPosition(endPosition) == (colorModifier * -1))
 		{
@@ -42,7 +52,7 @@ public class King extends Piece{
 	}
 	
 	public boolean castleIsValid(Position endPosition, ChessBoard chessBoard,
-			Piece[] darkPieces, Piece[] lightPieces)
+			ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		boolean valid = false;
 		int correctRow;
@@ -68,6 +78,15 @@ public class King extends Piece{
 
 		
 		return valid;
+	}
+
+	
+	public boolean isInCheck() {
+		return isInCheck;
+	}
+
+	public void setInCheck(boolean isInCheck) {
+		this.isInCheck = isInCheck;
 	}
 
 }

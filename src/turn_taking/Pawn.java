@@ -1,5 +1,7 @@
 package turn_taking;
 
+import java.util.ArrayList;
+
 public class Pawn extends Piece{
 
 	public Pawn(int isDark, Position position) 
@@ -8,7 +10,7 @@ public class Pawn extends Piece{
 	}
 
 	@Override
-	public boolean moveIsValid(Position endPosition, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces) 
+	public boolean moveIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) 
 	{
 		boolean valid = false;
 		
@@ -28,7 +30,7 @@ public class Pawn extends Piece{
 	}
 
 	@Override
-	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard, Piece[] darkPieces, Piece[] lightPieces) 
+	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) 
 	{
 		boolean valid = false;
 		

@@ -1,10 +1,10 @@
 package turn_taking;
 
 public class PieceMap {
-	private final char[] PIECE_HASHES = new char[] {'k', 'q', 'b', 'n', 'r', 'p', 'l', 'd'};
-	private final String[] PIECES = new String[] {"King", "Queen", "Bishop", "Knight", "Rook", "Pawn", "light", "dark"};
+	private static final char[] PIECE_HASHES = new char[] {'k', 'q', 'b', 'n', 'r', 'p', 'l', 'd'};
+	private static final String[] PIECES = new String[] {"King", "Queen", "Bishop", "Knight", "Rook", "Pawn", "Light", "Dark"};
 	
-	public String returnPiece(char c)
+	public static String returnPiece(char c)
 	{
 		int index = 0;
 		for(int i = 0; i < PIECE_HASHES.length; i++)
@@ -16,6 +16,12 @@ public class PieceMap {
 		}
 		
 		return PIECES[index];
+	}
+	
+	public static String returnPiece(int colorModifier)
+	{
+		char color = (colorModifier == 1) ? 'd' : 'l';
+		return returnPiece(color);
 	}
 }
 

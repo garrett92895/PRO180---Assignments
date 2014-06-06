@@ -31,6 +31,11 @@ public class MoveReader {
 		}
 	}
 	
+	public MoveReader()
+	{
+		parser = new MoveParser();
+	}
+	
 	public Directive[] collectDirectives()
 	{		
 		String line;
@@ -84,8 +89,4 @@ public class MoveReader {
 		}
 		return returnMoves;
 	}
-	
-
-
-
 }

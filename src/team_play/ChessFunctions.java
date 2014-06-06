@@ -1,20 +1,10 @@
-package turn_taking;
+package team_play;
 
 import java.util.ArrayList;
 
-public abstract class Directive {
-	protected int row1;
-	protected int column1;
+public class ChessFunctions {
 
-	public Directive(int column1, int row1)
-	{
-		this.row1 = row1;
-		this.column1 = column1;
-	}
-
-	public abstract boolean execute(ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces, boolean darkTurn);
-
-	public void updateBoard(ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
+	public static void updateBoard(ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		for(int i = 0; i < chessBoard.BOARD_SIZE; i++)
 		{
@@ -36,8 +26,8 @@ public abstract class Directive {
 			}
 		}
 	}
-
-	public Piece findPiece(Position position, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
+	
+	public static Piece findPiece(Position position, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		Piece returnPiece = null;
 
@@ -59,7 +49,7 @@ public abstract class Directive {
 		return returnPiece;
 	}
 
-	public Piece findPiece(char pieceType, int isDark, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
+	public static Piece findPiece(char pieceType, int isDark, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		Piece piece = null;
 		ArrayList<Piece> dangerPieces = (isDark == 1 ? darkPieces : lightPieces);
@@ -78,7 +68,7 @@ public abstract class Directive {
 		return piece;
 	}
 
-	public boolean isInCheck(int isDark, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
+	public static boolean isInCheck(int isDark, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		boolean valid = false;
 		King king = null;
@@ -97,7 +87,7 @@ public abstract class Directive {
 		return valid;
 	}
 
-	public boolean checkMate(int isDark, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
+	public static boolean checkMate(int isDark, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		boolean checkMate = true;
 
@@ -120,7 +110,7 @@ public abstract class Directive {
 							updateBoard(chessBoard, darkPieces, lightPieces);
 							if(!isInCheck(p.getColorModifier(), chessBoard, darkPieces, lightPieces))
 							{
-								checkMate = true;
+								checkMate = false;
 							}
 							p.setPosition(savedPosition);
 							updateBoard(chessBoard, darkPieces, lightPieces);
@@ -132,7 +122,7 @@ public abstract class Directive {
 							updateBoard(chessBoard, darkPieces, lightPieces);
 							if(!isInCheck(p.getColorModifier(), chessBoard, darkPieces, lightPieces))
 							{
-								checkMate = true;
+								checkMate = false;
 							}
 							p.setPosition(savedPosition);
 							updateBoard(chessBoard, darkPieces, lightPieces);
@@ -145,7 +135,7 @@ public abstract class Directive {
 		return checkMate;
 	}
 
-	public boolean isRightTurn(boolean darkTurn, Piece piece)
+	public static boolean isRightTurn(boolean darkTurn, Piece piece)
 	{
 		boolean valid = false;
 
@@ -156,18 +146,5 @@ public abstract class Directive {
 		}
 
 		return valid;
-	}
-
-	public int getRow1() {
-		return row1;
-	}
-	public void setRow1(int row1) {
-		this.row1 = row1;
-	}
-	public int getColumn1() {
-		return column1;
-	}
-	public void setColumn1(int column1) {
-		this.column1 = column1;
 	}
 }

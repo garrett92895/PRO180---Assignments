@@ -8,8 +8,8 @@ public class MoveDirective extends Directive{
 	
 	public MoveDirective(int column1, int row1, int column2, int row2)
 	{
-		super(column1, row1 - 1);
-		this.row2 = row2 - 1;
+		super(column1, row1);
+		this.row2 = row2;
 		this.column2 = column2;
 	}
 	
@@ -17,27 +17,27 @@ public class MoveDirective extends Directive{
 	public boolean execute(ChessBoard chessBoard, ArrayList<Piece> darkPieces,
 			ArrayList<Piece> lightPieces, boolean darkTurn) 
 	{
-		Piece piece = findPiece(new Position(row1, column1), chessBoard, darkPieces, lightPieces);
+		Piece piece = ChessFunctions.findPiece(new Position(row1, column1), chessBoard, darkPieces, lightPieces);
 		String errorMessage = "";
 		boolean successfulExecution = false;
 		
 		if(piece != null)
 		{
-			if(isRightTurn(darkTurn, piece))
+			if(ChessFunctions.isRightTurn(darkTurn, piece))
 			{
 				if(piece.moveIsValid(new Position(row2, column2), chessBoard, darkPieces, lightPieces))
 				{
 					piece.setPosition(new Position(row2, column2));
 					
-					if(!isInCheck(piece.getColorModifier(), chessBoard, darkPieces, lightPieces))
+					if(!ChessFunctions.isInCheck(piece.getColorModifier(), chessBoard, darkPieces, lightPieces))
 					{
 					System.out.println(PieceMap.returnPiece(piece.getPieceChar()) + " from " +
-							(char)(column1 + 'A') + (row1 + 1)
+							(char)(column1 + 'A') + (Math.abs(row1 - 8))
 							+ " to " +
-							(char)(column2 + 'A') + (row2 + 1));
+							(char)(column2 + 'A') + (Math.abs(row2 - 8)));
 
 					successfulExecution = true;
-					updateBoard(chessBoard, darkPieces, lightPieces);
+					ChessFunctions.updateBoard(chessBoard, darkPieces, lightPieces);
 					}
 					else
 					{
@@ -61,12 +61,25 @@ public class MoveDirective extends Directive{
 		}
 		if(successfulExecution)
 		{
-			King king = (King) findPiece('k', piece.getColorModifier() * -1, chessBoard, darkPieces, lightPieces);
-			king.setInCheck(isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces));
-			
+			King king = (King) ChessFunctions.findPiece('k', piece.getColorModifier() * -1, chessBoard, darkPieces, lightPieces);
+			king.setInCheck(ChessFunctions.isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces));
 			char color = (king.getColorModifier() == 1) ? 'd' : 'l';
+			
 			if(king.isInCheck())
-			System.out.println(PieceMap.returnPiece(color) + " King in check");
+			{
+				if(ChessFunctions.checkMate(king.getColorModifier(), chessBoard, darkPieces, lightPieces))
+				{
+					System.out.println("Check mate");
+					ChessFunctions.updateBoard(chessBoard, darkPieces, lightPieces);
+					System.out.println(chessBoard);
+					System.exit(0);
+				}
+				else
+				{
+				System.out.println(PieceMap.returnPiece(color) + " King in check");
+				}
+			}
+
 		}
 		if(!errorMessage.equals(""))
 			System.err.println(errorMessage);

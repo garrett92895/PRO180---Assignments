@@ -134,11 +134,13 @@ public abstract class Piece {
 		int slopeRise = (endPosition.getRow() - position.getRow()) / Math.abs(endPosition.getRow() - position.getRow());
 		
 		Position pathPosition = new Position(position.getRow(), position.getColumn());
+		boolean onBoard = (endPosition.getRow() >= 0 && endPosition.getRow() < chessBoard.BOARD_SIZE
+				&& endPosition.getColumn() >= 0 && endPosition.getColumn() < chessBoard.BOARD_SIZE);
 		
 		while(!pathingStop)
 		{
 				pathPosition.setRow(pathPosition.getRow() + slopeRise);
-				if(chessBoard.getBoard()[pathPosition.getRow()][pathPosition.getColumn()] != '-')
+				if(onBoard && chessBoard.getBoard()[pathPosition.getRow()][pathPosition.getColumn()] != '-')
 				{
 					pathingStop = true;
 				}
@@ -201,7 +203,14 @@ public abstract class Piece {
 				pathPosition.setRow(pathPosition.getRow() + slopeRise); 
 				pathPosition.setColumn(pathPosition.getColumn() + slopeRun);
 			
-				if(chessBoard.getBoard()[pathPosition.getRow()][pathPosition.getColumn()] != '-')
+				boolean onBoard = (pathPosition.getRow() >= 0 && pathPosition.getRow() < chessBoard.BOARD_SIZE
+						&& pathPosition.getColumn() >= 0 && pathPosition.getColumn() < chessBoard.BOARD_SIZE);
+				
+				if(!onBoard)
+				{
+					pathingStop = true;
+				}
+				if(onBoard && chessBoard.getBoard()[pathPosition.getRow()][pathPosition.getColumn()] != '-')
 				{
 					pathingStop = true;
 				}
@@ -210,6 +219,8 @@ public abstract class Piece {
 					isClear = true;
 					pathingStop = true;
 				}
+				
+
 		}
 		
 		return isClear;
@@ -219,6 +230,8 @@ public abstract class Piece {
 		boolean isClear = false;
 		
 		boolean pathingStop = false;
+		
+		
 		int slopeRise = (endPosition.getRow() - position.getRow()) / Math.abs(endPosition.getRow() - position.getRow());
 		int slopeRun = (endPosition.getColumn() - position.getColumn()) / Math.abs(endPosition.getColumn() - position.getColumn());
 		

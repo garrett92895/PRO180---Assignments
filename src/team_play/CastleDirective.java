@@ -23,12 +23,12 @@ public class CastleDirective extends MoveDirective{
 			isDark = 1;
 		}
 
-		Piece tempPiece1 = findPiece('k', isDark, chessBoard, darkPieces, lightPieces);
-		Piece tempPiece2 = findPiece(new Position(rookMove.getRow1(), rookMove.getColumn1()), chessBoard, darkPieces, lightPieces);
+		Piece tempPiece1 = ChessFunctions.findPiece('k', isDark, chessBoard, darkPieces, lightPieces);
+		Piece tempPiece2 = ChessFunctions.findPiece(new Position(rookMove.getRow1(), rookMove.getColumn1()), chessBoard, darkPieces, lightPieces);
 		King king = null;
 		Rook rook = null;
 		
-		if(tempPiece1 instanceof King && tempPiece2 instanceof Rook && isRightTurn(darkTurn, tempPiece1))
+		if(tempPiece1 instanceof King && tempPiece2 instanceof Rook && ChessFunctions.isRightTurn(darkTurn, tempPiece1))
 		{
 			king = (King) tempPiece1;
 			rook = (Rook) tempPiece2;
@@ -45,7 +45,7 @@ public class CastleDirective extends MoveDirective{
 					
 					System.out.println("Castled King to " + (char)(king.getPosition().getColumn() + 'A') + (king.getPosition().getRow() + 1)
 							+ " and Rook to " + (char)(rook.getPosition().getColumn() + 'A') + (rook.getPosition().getRow() + 1));
-					updateBoard(chessBoard, darkPieces, lightPieces);
+					ChessFunctions.updateBoard(chessBoard, darkPieces, lightPieces);
 					successfulExecution = true;
 				}
 				else

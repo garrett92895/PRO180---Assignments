@@ -1,4 +1,4 @@
-package team_play;
+package turn_taking;
 
 import java.util.ArrayList;
 
@@ -13,17 +13,17 @@ public class CaptureDirective extends MoveDirective{
 	public boolean execute(ChessBoard chessBoard, ArrayList<Piece> darkPieces,
 			ArrayList<Piece> lightPieces, boolean darkTurn) 
 	{
-		Piece piece = ChessFunctions.findPiece(new Position(row1, column1), chessBoard, darkPieces, lightPieces);
+		Piece piece = findPiece(new Position(row1, column1), chessBoard, darkPieces, lightPieces);
 		String errorMessage = "";
 		boolean successfulExecution = false;
 		
 		if(piece != null)
 		{
-			if(ChessFunctions.isRightTurn(darkTurn, piece))
+			if(isRightTurn(darkTurn, piece))
 			{
 				if(piece.captureIsValid(new Position(row2, column2), chessBoard, darkPieces, lightPieces))
 				{
-						Piece enemyPiece = ChessFunctions.findPiece(new Position(row2, column2), chessBoard, darkPieces, lightPieces);
+						Piece enemyPiece = findPiece(new Position(row2, column2), chessBoard, darkPieces, lightPieces);
 						char column = (char)(piece.getPosition().getColumn() + 'A');
 						int row = (piece.getPosition().getRow()) + 1;
 						piece.setPosition(new Position(row2, column2));
@@ -40,14 +40,14 @@ public class CaptureDirective extends MoveDirective{
 							}
 						}
 						
-						if(!ChessFunctions.isInCheck(piece.getColorModifier(), chessBoard, darkPieces, lightPieces))
+						if(!isInCheck(piece.getColorModifier(), chessBoard, darkPieces, lightPieces))
 						{
 							System.out.println(PieceMap.returnPiece(piece.getPieceChar()) + " from " +
 									column + Math.abs(row - 9) + " capturing " + PieceMap.returnPiece(enemyPiece.getPieceChar()) + " on " +
 									(char)(enemyPiece.getPosition().getColumn() + 'A') + (Math.abs(enemyPiece.getPosition().getRow() - 8)));
 							
 							successfulExecution = true;
-							ChessFunctions.updateBoard(chessBoard, darkPieces, lightPieces);
+							updateBoard(chessBoard, darkPieces, lightPieces);
 						}
 						else
 						{
@@ -72,16 +72,16 @@ public class CaptureDirective extends MoveDirective{
 		}
 		if(successfulExecution)
 		{
-			King king = (King) ChessFunctions.findPiece('k', piece.getColorModifier() * -1, chessBoard, darkPieces, lightPieces);
-			king.setInCheck(ChessFunctions.isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces));
+			King king = (King) findPiece('k', piece.getColorModifier() * -1, chessBoard, darkPieces, lightPieces);
+			king.setInCheck(isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces));
 			
 			char color = (king.getColorModifier() == 1) ? 'd' : 'l';
 			if(king.isInCheck())
 			{
-				if(ChessFunctions.checkMate(king.getColorModifier(), chessBoard, darkPieces, lightPieces))
+				if(checkMate(king.getColorModifier(), chessBoard, darkPieces, lightPieces))
 				{
 					System.out.println("Check mate");
-					ChessFunctions.updateBoard(chessBoard, darkPieces, lightPieces);
+					updateBoard(chessBoard, darkPieces, lightPieces);
 					System.out.println(chessBoard);
 					System.exit(0);
 				}

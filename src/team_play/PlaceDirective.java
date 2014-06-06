@@ -51,13 +51,13 @@ public class PlaceDirective extends Directive{
 			
 			pieces.add(tempPiece);
 			
-			System.out.println("Placing " + PieceMap.returnPiece(pieceType) + " on "
-					+ (char)(tempPiece.getPosition().getColumn() + 'A') + (tempPiece.getPosition().getRow() + 1));
+//			System.out.println("Placing " + PieceMap.returnPiece(pieceType) + " on "
+//					+ (char)(tempPiece.getPosition().getColumn() + 'A') + (Math.abs(tempPiece.getPosition().getRow() - 8)));
 			successfulExecution = true;
 		}
 		
-		updateBoard(chessBoard, darkPieces, lightPieces);
-		return successfulExecution;
+		ChessFunctions.updateBoard(chessBoard, darkPieces, lightPieces);
+		return false;
 	}
 	
 	public char getPieceType()

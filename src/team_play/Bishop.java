@@ -14,7 +14,8 @@ public class Bishop extends Piece{
 	public boolean moveIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) 
 	{
 		boolean valid = false;
-		if(Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) < UPPER_BOUND
+		boolean divideByZero = ((position.getColumn() - endPosition.getColumn()) == 0);
+		if(!divideByZero && Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) < UPPER_BOUND
 		&& Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) > LOWER_BOUND)
 		{
 			valid = moveIsClear(endPosition, chessBoard);
