@@ -13,24 +13,24 @@ public class Pawn extends Piece{
 	public boolean moveIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) 
 	{
 		boolean valid = false;
-		
 		if(moveCount == 0 && endPosition.getRow() == position.getRow() + (2 * colorModifier)
 				&& endPosition.getColumn() == position.getColumn()
-				&& chessBoard.hasPieceOnPosition(endPosition) == 0)
+				&& ChessFunctions.findPiece(endPosition, chessBoard, darkPieces, lightPieces) == null)
 		{
 			valid = true;
 		}
-		if(moveCount == 0 && endPosition.getRow() == position.getRow() + colorModifier
+		else if(endPosition.getRow() == position.getRow() + colorModifier
 				&& endPosition.getColumn() == position.getColumn()
-				&& chessBoard.hasPieceOnPosition(endPosition) == 0)
+				&& ChessFunctions.findPiece(endPosition, chessBoard, darkPieces, lightPieces) == null)
 		{
 			valid = true;
 		}	
+		
 		return valid;
 	}
 
 	@Override
-	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) 
+	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces, boolean darkTurn) 
 	{
 		boolean valid = false;
 		
@@ -38,7 +38,8 @@ public class Pawn extends Piece{
 		{
 			if(Math.abs(endPosition.getColumn() - position.getColumn()) == 1)
 			{
-				if(chessBoard.hasPieceOnPosition(endPosition) == (colorModifier * -1))
+				if(ChessFunctions.findPiece(endPosition, chessBoard, darkPieces, lightPieces) != null
+						&& ChessFunctions.findPiece(endPosition, chessBoard, darkPieces, lightPieces).getColorModifier() == (colorModifier * -1))
 				{
 					valid = true;
 				}

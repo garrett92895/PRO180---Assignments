@@ -18,7 +18,7 @@ public abstract class Piece {
 		moveCount = 0;
 	}
 	
-	protected boolean moveIsClear(Position endPosition, ChessBoard chessBoard)
+	protected boolean moveIsClear(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		boolean isClear = false;
 		
@@ -26,25 +26,24 @@ public abstract class Piece {
 		{
 				if(position.getRow() == endPosition.getRow())
 				{
-					isClear = rowMoveIsClear(endPosition, chessBoard);
+					isClear = rowMoveIsClear(endPosition, chessBoard, darkPieces, lightPieces);
 				}
 				else if(position.getColumn() == endPosition.getColumn())
 				{
-					isClear = columnMoveIsClear(endPosition, chessBoard);
+					isClear = columnMoveIsClear(endPosition, chessBoard, darkPieces, lightPieces);
 				}
 				else if(Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) < UPPER_BOUND
 						&& Math.abs((position.getRow() - endPosition.getRow()) / (position.getColumn() - endPosition.getColumn())) > LOWER_BOUND)
 				{
-					isClear = diagonalMoveIsClear(endPosition, chessBoard);
+					isClear = diagonalMoveIsClear(endPosition, chessBoard, darkPieces, lightPieces);
 				}
 		}
 		
 		return isClear;
 	}
-	protected boolean captureIsClear(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
+	protected boolean captureIsClear(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces, boolean darkTurn)
 	{
 		boolean isClear = false;
-		ArrayList<Piece> dangerPieces = (colorModifier == 1) ? lightPieces : darkPieces;
 		double rise = position.getRow() - endPosition.getRow();
 		double run = position.getColumn() - endPosition.getColumn();
 		double slope = Math.abs(rise / run);
@@ -52,22 +51,22 @@ public abstract class Piece {
 		{
 			if(position.getRow() == endPosition.getRow())
 			{
-				isClear = rowCaptureIsClear(endPosition, chessBoard, dangerPieces);
+				isClear = rowCaptureIsClear(endPosition, chessBoard, darkPieces, lightPieces, darkTurn);
 			}
 			else if(position.getColumn() == endPosition.getColumn())
 			{
-				isClear = columnCaptureIsClear(endPosition, chessBoard, dangerPieces);
+				isClear = columnCaptureIsClear(endPosition, chessBoard, darkPieces, lightPieces, darkTurn);
 			}
 			else if(slope < UPPER_BOUND
 					&& slope > LOWER_BOUND)
 			{
-				isClear = diagonalCaptureIsClear(endPosition, chessBoard, dangerPieces);
+				isClear = diagonalCaptureIsClear(endPosition, chessBoard, darkPieces, lightPieces, darkTurn);
 			}
 		}
 		return isClear;
 	}
 	
-	protected boolean rowMoveIsClear(Position endPosition, ChessBoard chessBoard)
+	protected boolean rowMoveIsClear(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		boolean isClear = false;
 		
@@ -80,7 +79,7 @@ public abstract class Piece {
 		{
 				pathPosition.setColumn(pathPosition.getColumn() + slopeRun);
 				
-				if(chessBoard.getBoard()[pathPosition.getRow()][pathPosition.getColumn()] != '-')
+				if(ChessFunctions.findPiece(pathPosition, chessBoard, darkPieces, lightPieces) != null)
 				{
 					pathingStop = true;
 				}
@@ -94,8 +93,9 @@ public abstract class Piece {
 		return isClear;
 		
 	}
-	protected boolean rowCaptureIsClear(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> dangerPieces)
+	protected boolean rowCaptureIsClear(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece>lightPieces, boolean darkTurn)
 	{
+		ArrayList<Piece> dangerPieces = (darkTurn) ? lightPieces : darkPieces;
 		boolean isClear = false;
 		boolean pathingStop = false;
 		int slopeRun = (endPosition.getColumn() - position.getColumn()) / Math.abs(endPosition.getColumn() - position.getColumn());
@@ -120,14 +120,14 @@ public abstract class Piece {
 					}
 					pathingStop = true;
 				}
-				else if(chessBoard.getBoard()[pathPosition.getRow()][pathPosition.getColumn()] != '-')
+				else if(ChessFunctions.findPiece(pathPosition, chessBoard, darkPieces, lightPieces) != null)
 				{
 					pathingStop = true;
 				}
 		}
 		return isClear;
 	}
-	protected boolean columnMoveIsClear(Position endPosition, ChessBoard chessBoard)
+	protected boolean columnMoveIsClear(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		boolean isClear = false;
 		boolean pathingStop = false;
@@ -140,7 +140,7 @@ public abstract class Piece {
 		while(!pathingStop)
 		{
 				pathPosition.setRow(pathPosition.getRow() + slopeRise);
-				if(onBoard && chessBoard.getBoard()[pathPosition.getRow()][pathPosition.getColumn()] != '-')
+				if(ChessFunctions.findPiece(pathPosition, chessBoard, darkPieces, lightPieces) != null)
 				{
 					pathingStop = true;
 				}
@@ -153,7 +153,7 @@ public abstract class Piece {
 		}
 		return isClear;
 	}
-	protected boolean columnCaptureIsClear(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> dangerPieces)
+	protected boolean columnCaptureIsClear(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces, boolean darkTurn)
 	{
 		boolean isClear = false;
 		
@@ -161,6 +161,7 @@ public abstract class Piece {
 		int slopeRise = (endPosition.getRow() - position.getRow()) / Math.abs(endPosition.getRow() - position.getRow());
 		
 		Position pathPosition = new Position(position.getRow(), position.getColumn());
+		ArrayList<Piece> dangerPieces = (darkTurn) ? lightPieces : darkPieces;
 		
 		while(!pathingStop)
 		{
@@ -180,7 +181,7 @@ public abstract class Piece {
 				}
 				pathingStop = true;
 			}
-			else if(chessBoard.getBoard()[pathPosition.getRow()][pathPosition.getColumn()] != '-')
+			else if(ChessFunctions.findPiece(pathPosition, chessBoard, darkPieces, lightPieces) != null)
 			{
 				pathingStop = true;
 			}
@@ -188,7 +189,7 @@ public abstract class Piece {
 		
 		return isClear;
 	}
-	protected boolean diagonalMoveIsClear(Position endPosition, ChessBoard chessBoard)
+	protected boolean diagonalMoveIsClear(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
 	{
 		boolean isClear = false;
 		
@@ -210,7 +211,7 @@ public abstract class Piece {
 				{
 					pathingStop = true;
 				}
-				if(onBoard && chessBoard.getBoard()[pathPosition.getRow()][pathPosition.getColumn()] != '-')
+				if(onBoard && ChessFunctions.findPiece(new Position(pathPosition.getRow(), pathPosition.getColumn()), chessBoard, darkPieces, lightPieces) != null)
 				{
 					pathingStop = true;
 				}
@@ -225,7 +226,7 @@ public abstract class Piece {
 		
 		return isClear;
 	}
-	protected boolean diagonalCaptureIsClear(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> dangerPieces)
+	protected boolean diagonalCaptureIsClear(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces, boolean darkTurn)
 	{
 		boolean isClear = false;
 		
@@ -236,6 +237,7 @@ public abstract class Piece {
 		int slopeRun = (endPosition.getColumn() - position.getColumn()) / Math.abs(endPosition.getColumn() - position.getColumn());
 		
 		Position pathPosition = new Position(position.getRow(), position.getColumn());
+		ArrayList<Piece> dangerPieces = (darkTurn) ? lightPieces : darkPieces;
 		
 		while(!pathingStop)
 		{
@@ -256,7 +258,7 @@ public abstract class Piece {
 						}
 					pathingStop = true;
 				}
-				else if(chessBoard.getBoard()[pathPosition.getRow()][pathPosition.getColumn()] != '-')
+				else if(ChessFunctions.findPiece(pathPosition, chessBoard, darkPieces, lightPieces) != null)
 				{								
 					pathingStop = true;
 				}
@@ -266,7 +268,7 @@ public abstract class Piece {
 	}
 	
 	public abstract boolean moveIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces);
-	public abstract boolean captureIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces);
+	public abstract boolean captureIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces, boolean darkTurn);
 	
 	public int getColorModifier() {
 		return colorModifier;

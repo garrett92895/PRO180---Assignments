@@ -36,7 +36,7 @@ public class CastleDirective extends MoveDirective{
 			{
 				if(king.castleIsValid(new Position(row2, column2), chessBoard, darkPieces, lightPieces)
 						&& rook.moveIsClear(new Position(rookMove.getRow2(), rookMove.getColumn2()),
-								chessBoard))
+								chessBoard, darkPieces, lightPieces))
 				{
 					king.setPosition(new Position(row2, column2));
 					rook.setPosition(new Position(rookMove.getRow2(), rookMove.getColumn2()));

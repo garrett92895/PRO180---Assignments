@@ -6,7 +6,6 @@ public class Driver {
 	{
 		Game game = new Game();	
 		game.run();
-		//Loops through the array of Directive objects and executes them
 
 	}
 

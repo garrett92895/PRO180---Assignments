@@ -29,15 +29,16 @@ public class MoveDirective extends Directive{
 				{
 					piece.setPosition(new Position(row2, column2));
 					
-					if(!ChessFunctions.isInCheck(piece.getColorModifier(), chessBoard, darkPieces, lightPieces))
+					if(!ChessFunctions.isInCheck(piece.getColorModifier(), chessBoard, darkPieces, lightPieces, darkTurn))
 					{
-					System.out.println(PieceMap.returnPiece(piece.getPieceChar()) + " from " +
-							(char)(column1 + 'A') + (Math.abs(row1 - 8))
-							+ " to " +
-							(char)(column2 + 'A') + (Math.abs(row2 - 8)));
-
-					successfulExecution = true;
-					ChessFunctions.updateBoard(chessBoard, darkPieces, lightPieces);
+						System.out.println(PieceMap.returnPiece(piece.getPieceChar()) + " from " +
+								(char)(column1 + 'A') + (Math.abs(row1 - 8))
+								+ " to " +
+								(char)(column2 + 'A') + (Math.abs(row2 - 8)));
+	
+						successfulExecution = true;
+						piece.incrementMoveCount();
+						ChessFunctions.updateBoard(chessBoard, darkPieces, lightPieces);
 					}
 					else
 					{
@@ -62,22 +63,22 @@ public class MoveDirective extends Directive{
 		if(successfulExecution)
 		{
 			King king = (King) ChessFunctions.findPiece('k', piece.getColorModifier() * -1, chessBoard, darkPieces, lightPieces);
-			king.setInCheck(ChessFunctions.isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces));
+			king.setInCheck(ChessFunctions.isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces, darkTurn));
 			char color = (king.getColorModifier() == 1) ? 'd' : 'l';
 			
 			if(king.isInCheck())
 			{
-				if(ChessFunctions.checkMate(king.getColorModifier(), chessBoard, darkPieces, lightPieces))
-				{
-					System.out.println("Check mate");
-					ChessFunctions.updateBoard(chessBoard, darkPieces, lightPieces);
-					System.out.println(chessBoard);
-					System.exit(0);
-				}
-				else
-				{
+//				if(ChessFunctions.checkMate(king.getColorModifier(), chessBoard, darkPieces, lightPieces, darkTurn))
+//				{
+//					System.out.println("Check mate");
+//					ChessFunctions.updateBoard(chessBoard, darkPieces, lightPieces);
+//					System.out.println(chessBoard);
+//					//System.exit(0);
+//				}
+//				else
+//				{
 				System.out.println(PieceMap.returnPiece(color) + " King in check");
-				}
+//				}
 			}
 
 		}

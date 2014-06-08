@@ -16,10 +16,15 @@ public class Knight extends Piece{
 		boolean valid = false;
 		double row = (endPosition.getRow() - position.getRow());
 		double column = (endPosition.getColumn() - position.getColumn());
-		double slope = Math.abs(row / column);
+		double slope = 0;
 		
-		if((slope < .5001 && slope > .4999) || (slope < 2.0001 && slope > 1.9999)
-				&& chessBoard.hasPieceOnPosition(endPosition) == 0)
+		if(Math.abs(row) <= 2 && Math.abs(column) <= 2)
+		{
+			slope = Math.abs(row / column);
+		}
+		
+		if(((slope < .5001 && slope > .4999) || (slope < 2.0001 && slope > 1.9999))
+				&& ChessFunctions.findPiece(endPosition, chessBoard, darkPieces, lightPieces) == null)
 		{
 			valid = true;
 		}
@@ -28,7 +33,7 @@ public class Knight extends Piece{
 	}
 
 	@Override
-	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) 
+	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces, boolean darkTurn) 
 	{
 		boolean valid = false;
 		double row = (endPosition.getRow() - position.getRow());
@@ -40,8 +45,9 @@ public class Knight extends Piece{
 			slope = Math.abs(row / column);
 		}
 		
-		if((slope < .5001 && slope > .4999) || (slope < 2.0001 && slope > 1.9999)
-				&& chessBoard.hasPieceOnPosition(endPosition) == (colorModifier * -1))
+		if(((slope < .5001 && slope > .4999) || (slope < 2.0001 && slope > 1.9999))
+				&& ChessFunctions.findPiece(endPosition, chessBoard, darkPieces, lightPieces) != null 
+				&& ChessFunctions.findPiece(endPosition, chessBoard, darkPieces, lightPieces).getColorModifier() == (colorModifier * -1))
 		{
 			valid = true;
 		}

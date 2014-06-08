@@ -43,27 +43,46 @@ public class Game {
 		lightPiecePlace[14] = new PlaceDirective('q', 'l', 3, 8);
 		lightPiecePlace[15] = new PlaceDirective('k', 'l', 4, 8);
 		
+
+
 		for(int i = 0; i < darkPiecePlace.length; i++)
 		{
 			executeDirective(darkPiecePlace[i]);
 			executeDirective(lightPiecePlace[i]);
 		}
 		
+		//Fool's mate
+//		executeDirective(new MoveDirective(5, 6, 5, 5));
+//		executeDirective(new MoveDirective(4, 1, 4, 2));
+//		executeDirective(new MoveDirective(6, 6, 6, 4));
+//		executeDirective(new MoveDirective(3, 0, 7, 4));
+		
+		//Test1
+//		executeDirective(new CaptureDirective(7, 7, 7, 0));
+//		executeDirective(new MoveDirective(4, 0, 4, 1));
+//		executeDirective(new MoveDirective(7, 0, 7, 1));
 	}
 	
 	public void run()
 	{
 		Scanner scan = new Scanner(System.in);
+		//Prints board
 		System.out.println(toString());
 		
-		while(!ChessFunctions.checkMate(1, chessBoard, darkPieces, lightPieces)
-				&& !ChessFunctions.checkMate(-1, chessBoard, darkPieces, lightPieces))
+		//The game will run until checkmate or stalemate occurs
+		while(!ChessFunctions.checkMate(1, chessBoard, darkPieces, lightPieces, !darkTurn)
+				&& !ChessFunctions.checkMate(-1, chessBoard, darkPieces, lightPieces, !darkTurn)
+				&& !ChessFunctions.staleMate(1, chessBoard, darkPieces, lightPieces, !darkTurn)
+				&& !ChessFunctions.staleMate(-1, chessBoard, darkPieces, lightPieces, !darkTurn))
 		{
+			//colorTurn is assigned an appropriate string for Sysout purposes
 			String colorTurn = (darkTurn) ? "Dark" : "Light";
 			System.out.println(colorTurn + " turn" + "\n" + "These are your pieces with valid moves: ");
 			
+			//Stores an array of all of the pieces with valid moves
 			ArrayList<Piece> piecesWithMoves = getPiecesWithMoves(darkTurn);
 			
+			//Prints to the console all the valid pieces
 			for(int i = 0; i < piecesWithMoves.size(); i++)
 			{
 				Piece p = piecesWithMoves.get(i);
@@ -80,13 +99,16 @@ public class Game {
 				userChoice = Integer.parseInt(scan.nextLine());
 			}catch(NumberFormatException e){}
 			
+			//If an error was caught userChoice will still be -1
 			if(userChoice >= 0 && userChoice < piecesWithMoves.size())
 			{
+				//Gets the specific piece the user selected and gets all of its valid moves
 				Piece userPiece = piecesWithMoves.get(userChoice);
 				ArrayList<Position> moves = getMovesForPiece(userPiece);
 				
 				System.out.println("Here is a list of the moves the " + PieceMap.returnPiece(userPiece.getPieceChar()) + " can make");
 				
+				//Prints the list of valid moves for the selected piece
 				for(int i = 0; i < moves.size(); i++)
 				{
 					System.out.println(i + ") " + (char)(moves.get(i).getColumn() + 'A') + Math.abs(moves.get(i).getRow() - 8));
@@ -103,7 +125,10 @@ public class Game {
 				if(userChoice >= 0 && userChoice < moves.size())
 				{
 					Directive userMove = null;
-					if(chessBoard.getBoard()[moves.get(userChoice).getRow()][moves.get(userChoice).getColumn()] != '-')
+					//If the end position that the user selected from the list has a piece then a 
+					//CaptureDirective object is created. Else, a MoveDirective
+					if(ChessFunctions.findPiece(new Position(moves.get(userChoice).getRow(), moves.get(userChoice).getColumn()), 
+							chessBoard, darkPieces, lightPieces) != null)
 					{
 						userMove = new CaptureDirective(userPiece.getPosition().getColumn(), userPiece.getPosition().getRow(),
 								moves.get(userChoice).getColumn(), moves.get(userChoice).getRow());
@@ -123,6 +148,16 @@ public class Game {
 				System.out.println("Invalid choice. Please enter a valid piece choice.");
 			}
 		}
+		
+		if(ChessFunctions.checkMate(1, chessBoard, darkPieces, lightPieces, !darkTurn)
+				|| ChessFunctions.checkMate(-1, chessBoard, darkPieces, lightPieces, !darkTurn))
+		{
+			System.out.println("Checkmate");
+		}
+		else
+		{
+			System.out.println("Stalemate");
+		}
 	}
 
 	/**
@@ -138,8 +173,6 @@ public class Game {
 		{
 			darkTurn = !darkTurn;
 			System.out.println(toString());
-			
-			
 		}
 	}
 	
@@ -148,15 +181,23 @@ public class Game {
 		ArrayList<Piece> currentPieces = (darkTurn) ? darkPieces : lightPieces;
 		ArrayList<Piece> piecesWithMoves = new ArrayList<Piece>();
 		
+		//Loops through every piece on a specific team with every spot on the board and adds any pieces with 
+		//one or more moves
 		for(Piece p : currentPieces)
 		{
 			for(int i = 0; i < chessBoard.BOARD_SIZE; i++)
 			{
 				for(int x = 0; x < chessBoard.BOARD_SIZE; x++)
 				{
-					if(p.moveIsValid(new Position(i, x), chessBoard, darkPieces, lightPieces) && !piecesWithMoves.contains(p))
+					if((p.moveIsValid(new Position(i, x), chessBoard, darkPieces, lightPieces) && !piecesWithMoves.contains(p)))
 					{
-						piecesWithMoves.add(p);
+						Position savedPosition = p.getPosition();
+						p.setPosition(new Position(i, x));
+						if(!ChessFunctions.isInCheck(p.getColorModifier(), chessBoard, darkPieces, lightPieces, !darkTurn))
+						{
+							piecesWithMoves.add(p);
+						}
+						p.setPosition(savedPosition);
 					}
 				}
 			}
@@ -168,14 +209,24 @@ public class Game {
 	private ArrayList<Position> getMovesForPiece(Piece piece)
 	{
 		ArrayList<Position> moves = new ArrayList<Position>();
+		Position savedPosition = piece.getPosition();
+		
+		//Loops through every spot on the board and checks to see if piece has a valid move or 
+		//capture to that specific position. If so, it will add that position to an arraylist
 		for(int i = 0; i < chessBoard.getBoard().length; i++)
 		{
 			for(int x = 0; x < chessBoard.getBoard()[i].length; x++)
 			{
 				if(piece.moveIsValid(new Position(i, x), chessBoard, darkPieces, lightPieces) 
-						|| piece.captureIsValid(new Position(i, x), chessBoard, darkPieces, lightPieces))
+						|| piece.captureIsValid(new Position(i, x), chessBoard, darkPieces, lightPieces, darkTurn))
 				{
-					moves.add(new Position(i, x));
+					piece.setPosition(new Position(i, x));
+					ChessFunctions.updateBoard(chessBoard, darkPieces, lightPieces);
+					if(!ChessFunctions.isInCheck(piece.getColorModifier(), chessBoard, darkPieces, lightPieces, !darkTurn))
+					{
+						moves.add(new Position(i, x));
+					}
+					piece.setPosition(savedPosition);
 				}
 			}
 		}
@@ -186,6 +237,6 @@ public class Game {
 	@Override
 	public String toString()
 	{
-		return /*darkTurn + "\n" + */chessBoard.toString();
+		return chessBoard.toString();
 	}
 }

@@ -11,12 +11,12 @@ public class Queen extends Piece{
 
 	@Override
 	public boolean moveIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) {
-		return moveIsClear(endPosition, chessBoard);
+		return moveIsClear(endPosition, chessBoard, darkPieces, lightPieces);
 	}
 
 	@Override
-	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) {
-		return captureIsClear(endPosition, chessBoard, darkPieces, lightPieces);
+	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces, boolean darkTurn) {
+		return captureIsClear(endPosition, chessBoard, darkPieces, lightPieces, darkTurn);
 	}
 
 }

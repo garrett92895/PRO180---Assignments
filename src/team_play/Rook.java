@@ -16,19 +16,19 @@ public class Rook extends Piece{
 		if(endPosition.getColumn() == position.getColumn()
 				|| endPosition.getRow() == position.getRow())
 		{
-			valid = moveIsClear(endPosition, chessBoard);
+			valid = moveIsClear(endPosition, chessBoard, darkPieces, lightPieces);
 		}
 		return valid;
 	}
 
 	@Override
-	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) 
+	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces, boolean darkTurn) 
 	{
 		boolean valid = false;
 		if(endPosition.getColumn() == position.getColumn()
 				|| endPosition.getRow() == position.getRow())
 		{
-			valid = captureIsClear(endPosition, chessBoard, darkPieces, lightPieces);
+			valid = captureIsClear(endPosition, chessBoard, darkPieces, lightPieces, darkTurn);
 		}
 		return valid;
 	}

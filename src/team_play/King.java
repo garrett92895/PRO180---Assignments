@@ -22,7 +22,7 @@ public class King extends Piece{
 		
 		if(onBoard && Math.abs(endPosition.getRow() - position.getRow()) <= 1 
 				&& Math.abs(endPosition.getColumn() - position.getColumn()) <= 1
-				&& chessBoard.hasPieceOnPosition(endPosition) == 0
+				&& ChessFunctions.findPiece(endPosition, chessBoard, darkPieces, lightPieces) == null
 				)
 		{
 				valid = true;
@@ -33,7 +33,7 @@ public class King extends Piece{
 
 	@Override
 	public boolean captureIsValid(Position endPosition, ChessBoard chessBoard,
-			ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces) 
+			ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces, boolean darkTurn) 
 	{
 		boolean valid = false;
 		boolean onBoard = (endPosition.getRow() >= 0 && endPosition.getRow() < chessBoard.BOARD_SIZE
@@ -41,7 +41,8 @@ public class King extends Piece{
 		
 		if(onBoard && Math.abs(endPosition.getRow() - position.getRow()) <= 1 					//If the desired position is 1 row or less away from the current position
 				&& Math.abs(endPosition.getColumn() - position.getColumn()) <= 1	//If the desired position is 1 column or less away from the current position
-				&& chessBoard.hasPieceOnPosition(endPosition) == (colorModifier * -1))
+				&& ChessFunctions.findPiece(endPosition, chessBoard, darkPieces, lightPieces) != null 
+				&& ChessFunctions.findPiece(endPosition, chessBoard, darkPieces, lightPieces).getColorModifier() == (colorModifier * -1))
 		{
 			{				
 					valid = true;

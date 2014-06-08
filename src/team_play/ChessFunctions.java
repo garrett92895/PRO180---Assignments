@@ -68,7 +68,7 @@ public class ChessFunctions {
 		return piece;
 	}
 
-	public static boolean isInCheck(int isDark, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
+	public static boolean isInCheck(int isDark, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces, boolean darkTurn)
 	{
 		boolean valid = false;
 		King king = null;
@@ -78,7 +78,7 @@ public class ChessFunctions {
 		for(int i = 0; i < dangerPieces.size(); i++)
 		{
 			if(dangerPieces.get(i) != null &&
-					dangerPieces.get(i).captureIsValid(new Position(king.getPosition().getRow(), king.getPosition().getColumn()), chessBoard, darkPieces, lightPieces))
+					dangerPieces.get(i).captureIsValid(new Position(king.getPosition().getRow(), king.getPosition().getColumn()), chessBoard, darkPieces, lightPieces, darkTurn))
 			{
 				valid = true;
 			}
@@ -87,11 +87,10 @@ public class ChessFunctions {
 		return valid;
 	}
 
-	public static boolean checkMate(int isDark, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces)
+	public static boolean checkMate(int isDark, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces, boolean darkTurn)
 	{
-		boolean checkMate = true;
-
 		King king = (King) findPiece('k', isDark, chessBoard, darkPieces, lightPieces);
+		boolean checkMate = ChessFunctions.isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces, darkTurn);
 
 		if(checkMate)
 		{
@@ -108,7 +107,7 @@ public class ChessFunctions {
 						{
 							p.setPosition(new Position(i, x));
 							updateBoard(chessBoard, darkPieces, lightPieces);
-							if(!isInCheck(p.getColorModifier(), chessBoard, darkPieces, lightPieces))
+							if(!isInCheck(p.getColorModifier(), chessBoard, darkPieces, lightPieces, darkTurn))
 							{
 								checkMate = false;
 							}
@@ -116,11 +115,11 @@ public class ChessFunctions {
 							updateBoard(chessBoard, darkPieces, lightPieces);
 						}
 
-						if(p.captureIsValid(new Position(i, x), chessBoard, darkPieces, lightPieces))
+						if(p.captureIsValid(new Position(i, x), chessBoard, darkPieces, lightPieces, darkTurn))
 						{
 							p.setPosition(new Position(i, x));
 							updateBoard(chessBoard, darkPieces, lightPieces);
-							if(!isInCheck(p.getColorModifier(), chessBoard, darkPieces, lightPieces))
+							if(!isInCheck(p.getColorModifier(), chessBoard, darkPieces, lightPieces, darkTurn))
 							{
 								checkMate = false;
 							}
@@ -135,6 +134,56 @@ public class ChessFunctions {
 		return checkMate;
 	}
 
+	public static boolean staleMate(int isDark, ChessBoard chessBoard, ArrayList<Piece> darkPieces, ArrayList<Piece> lightPieces, boolean darkTurn)
+	{
+		boolean stalemate = true;
+		
+		if(!isInCheck(isDark, chessBoard, darkPieces, lightPieces, darkTurn))
+		{
+			King king = (King) findPiece('k', isDark, chessBoard, darkPieces, lightPieces);
+			ArrayList<Piece> friendlyPieces = (king.getColorModifier() == 1) ? darkPieces : lightPieces;
+			
+			for(Piece p : friendlyPieces)
+			{
+				Position savedPosition = p.getPosition();
+				for(int i = 0; i < chessBoard.getBoard().length; i++)
+				{
+					for(int x = 0; x < chessBoard.getBoard()[i].length; x++)
+					{
+						if(p.moveIsValid(new Position(i, x), chessBoard, darkPieces, lightPieces))
+						{
+							p.setPosition(new Position(i, x));
+							updateBoard(chessBoard, darkPieces, lightPieces);
+							if(!isInCheck(p.getColorModifier(), chessBoard, darkPieces, lightPieces, darkTurn))
+							{
+								stalemate = false;
+							}
+							p.setPosition(savedPosition);
+							updateBoard(chessBoard, darkPieces, lightPieces);
+						}
+						if(p.captureIsValid(new Position(i, x), chessBoard, darkPieces, lightPieces, darkTurn))
+						{
+							p.setPosition(new Position(i, x));
+							updateBoard(chessBoard, darkPieces, lightPieces);
+							if(!isInCheck(p.getColorModifier(), chessBoard, darkPieces, lightPieces, darkTurn))
+							{
+								stalemate = false;
+							}
+							p.setPosition(savedPosition);
+							updateBoard(chessBoard, darkPieces, lightPieces);
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			stalemate = false;
+		}
+		
+		return stalemate;
+	}
+	
 	public static boolean isRightTurn(boolean darkTurn, Piece piece)
 	{
 		boolean valid = false;

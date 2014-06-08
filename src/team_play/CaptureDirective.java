@@ -21,7 +21,7 @@ public class CaptureDirective extends MoveDirective{
 		{
 			if(ChessFunctions.isRightTurn(darkTurn, piece))
 			{
-				if(piece.captureIsValid(new Position(row2, column2), chessBoard, darkPieces, lightPieces))
+				if(piece.captureIsValid(new Position(row2, column2), chessBoard, darkPieces, lightPieces, darkTurn))
 				{
 						Piece enemyPiece = ChessFunctions.findPiece(new Position(row2, column2), chessBoard, darkPieces, lightPieces);
 						char column = (char)(piece.getPosition().getColumn() + 'A');
@@ -40,13 +40,14 @@ public class CaptureDirective extends MoveDirective{
 							}
 						}
 						
-						if(!ChessFunctions.isInCheck(piece.getColorModifier(), chessBoard, darkPieces, lightPieces))
+						if(!ChessFunctions.isInCheck(piece.getColorModifier(), chessBoard, darkPieces, lightPieces, darkTurn))
 						{
 							System.out.println(PieceMap.returnPiece(piece.getPieceChar()) + " from " +
 									column + Math.abs(row - 9) + " capturing " + PieceMap.returnPiece(enemyPiece.getPieceChar()) + " on " +
 									(char)(enemyPiece.getPosition().getColumn() + 'A') + (Math.abs(enemyPiece.getPosition().getRow() - 8)));
 							
 							successfulExecution = true;
+							piece.incrementMoveCount();
 							ChessFunctions.updateBoard(chessBoard, darkPieces, lightPieces);
 						}
 						else
@@ -73,22 +74,22 @@ public class CaptureDirective extends MoveDirective{
 		if(successfulExecution)
 		{
 			King king = (King) ChessFunctions.findPiece('k', piece.getColorModifier() * -1, chessBoard, darkPieces, lightPieces);
-			king.setInCheck(ChessFunctions.isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces));
+			king.setInCheck(ChessFunctions.isInCheck(king.getColorModifier(), chessBoard, darkPieces, lightPieces, darkTurn));
 			
 			char color = (king.getColorModifier() == 1) ? 'd' : 'l';
 			if(king.isInCheck())
 			{
-				if(ChessFunctions.checkMate(king.getColorModifier(), chessBoard, darkPieces, lightPieces))
-				{
-					System.out.println("Check mate");
-					ChessFunctions.updateBoard(chessBoard, darkPieces, lightPieces);
-					System.out.println(chessBoard);
-					System.exit(0);
-				}
-				else
-				{
+//				if(ChessFunctions.checkMate(king.getColorModifier(), chessBoard, darkPieces, lightPieces, darkTurn))
+//				{
+//					System.out.println("Check mate");
+//					ChessFunctions.updateBoard(chessBoard, darkPieces, lightPieces);
+//					System.out.println(chessBoard);
+//					//System.exit(0);
+//				}
+//				else
+//				{
 					System.out.println(PieceMap.returnPiece(color) + " King in check");
-				}
+//				}
 			}
 
 		}
