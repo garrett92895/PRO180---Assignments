@@ -42,9 +42,12 @@ public class CaptureDirective extends MoveDirective{
 						
 						if(!ChessFunctions.isInCheck(piece.getColorModifier(), chessBoard, darkPieces, lightPieces, darkTurn))
 						{
-							System.out.println(PieceMap.returnPiece(piece.getPieceChar()) + " from " +
-									column + Math.abs(row - 9) + " capturing " + PieceMap.returnPiece(enemyPiece.getPieceChar()) + " on " +
-									(char)(enemyPiece.getPosition().getColumn() + 'A') + (Math.abs(enemyPiece.getPosition().getRow() - 8)));
+							System.out.println("" +
+									(char)(column1 + 'a') + (Math.abs(row1 - 8))
+									+ " " +
+									(char)(column2 + 'a') + (Math.abs(row2 - 8))
+									+ "*"
+									);
 							
 							successfulExecution = true;
 							piece.incrementMoveCount();

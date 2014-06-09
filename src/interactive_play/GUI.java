@@ -229,7 +229,7 @@ public class GUI {
 				
 				if(!pieceAlreadySelected())
 				{
-					if(piece != null && ChessFunctions.isRightTurn(game.isDarkTurn(), piece))
+					if(piece != null && ChessFunctions.isRightTurn(game.isDarkTurn(), piece) && game.getPiecesWithMoves().contains(piece))
 					{
 						currentPiece = piece;
 						isSelected = true;

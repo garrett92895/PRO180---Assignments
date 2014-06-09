@@ -31,10 +31,10 @@ public class MoveDirective extends Directive{
 					
 					if(!ChessFunctions.isInCheck(piece.getColorModifier(), chessBoard, darkPieces, lightPieces, darkTurn))
 					{
-						System.out.println(PieceMap.returnPiece(piece.getPieceChar()) + " from " +
-								(char)(column1 + 'A') + (Math.abs(row1 - 8))
-								+ " to " +
-								(char)(column2 + 'A') + (Math.abs(row2 - 8)));
+						System.out.println("" +
+								(char)(column1 + 'a') + (Math.abs(row1 - 8))
+								+ " " +
+								(char)(column2 + 'a') + (Math.abs(row2 - 8)));
 	
 						successfulExecution = true;
 						piece.incrementMoveCount();

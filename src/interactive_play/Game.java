@@ -81,7 +81,7 @@ public class Game extends Observable{
 			System.out.println(colorTurn + " turn" + "\n" + "These are your pieces with valid moves: ");
 			
 			//Stores an array of all of the pieces with valid moves
-			ArrayList<Piece> piecesWithMoves = getPiecesWithMoves(darkTurn);
+			ArrayList<Piece> piecesWithMoves = getPiecesWithMoves();
 			
 			//Prints to the console all the valid pieces
 			for(int i = 0; i < piecesWithMoves.size(); i++)
@@ -188,7 +188,7 @@ public class Game extends Observable{
 		}
 	}
 	
-	public ArrayList<Piece> getPiecesWithMoves(boolean darkTurn)
+	public ArrayList<Piece> getPiecesWithMoves()
 	{
 		ArrayList<Piece> currentPieces = (darkTurn) ? darkPieces : lightPieces;
 		ArrayList<Piece> piecesWithMoves = new ArrayList<Piece>();
