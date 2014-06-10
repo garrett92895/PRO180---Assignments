@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class GUI {
@@ -21,6 +22,8 @@ public class GUI {
 	private ChessPanel[][] panels;
 	private Piece currentPiece; 
 	private JPanel masterPanel;
+	private JOptionPane jp;
+	boolean jpShown;
 	
 	public GUI(Game game)
 	{
@@ -28,6 +31,8 @@ public class GUI {
 		currentPiece = null;
 		JFrame frame = new JFrame("Chess");
 		masterPanel = new JPanel();
+		jp = new JOptionPane();
+		jpShown = false;
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(new Dimension(800, 800));
 		masterPanel.setLayout(new GridLayout(8, 8));
@@ -105,6 +110,29 @@ public class GUI {
     			panels[i][x].repaint();
     		}
     	}
+    	
+		if(!jpShown)
+		{
+			boolean darkKingStalemate = ChessFunctions.staleMate(1, game.getChessBoard(), game.getDarkPieces(), game.getLightPieces(), !game.isDarkTurn());
+			boolean lightKingStalemate = ChessFunctions.staleMate(-1, game.getChessBoard(), game.getDarkPieces(), game.getLightPieces(), !game.isDarkTurn());
+			boolean darkKingCheckmate = ChessFunctions.checkMate(1, game.getChessBoard(), game.getDarkPieces(), game.getLightPieces(), !game.isDarkTurn());
+			boolean lightKingCheckmate = ChessFunctions.checkMate(-1, game.getChessBoard(), game.getDarkPieces(), game.getLightPieces(), !game.isDarkTurn());
+			
+			if(darkKingStalemate
+					|| lightKingStalemate)
+			{
+				jp.setMessage("Stalemate");
+				jp.showMessageDialog(null, jp.getMessage());
+				jpShown = true;
+			}
+			else if(darkKingCheckmate
+					|| lightKingCheckmate)
+			{
+				jp.setMessage("Checkmate");
+				jp.showMessageDialog(null, jp.getMessage());
+				jpShown = true;
+			}
+		}
     }
     
     public void resetAll()
@@ -221,22 +249,19 @@ public class GUI {
 			public void mouseDragged(MouseEvent e) {}
 
 			@Override
-			public void mouseMoved(MouseEvent e) {}
+			public void mouseMoved(MouseEvent e) {
+
+			}
 
 			@Override
 			public void mouseClicked(MouseEvent e) 
 			{
 				Piece piece = ChessFunctions.findPiece(position, game.getChessBoard(), game.getDarkPieces(), game.getLightPieces());
 				ArrayList<Piece> moves = game.getPiecesWithMoves();
-				System.out.println(piece);
-				System.out.println(currentPiece);
 				if(!pieceAlreadySelected())
 				{
-					System.out.println("No piece selected");
-					System.out.println(moves);
 					if(piece != null && ChessFunctions.isRightTurn(game.isDarkTurn(), piece) && moves.contains(piece))
 					{
-						System.out.println("Set to current piece");
 						currentPiece = piece;
 						isSelected = true;
 					}
@@ -258,13 +283,15 @@ public class GUI {
 					resetAll();
 					
 				}
-
+				
 				repaintAll();
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
+
+				
 				if(!pieceAlreadySelected())
 					isHovered = true;
 				repaint();

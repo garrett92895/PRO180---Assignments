@@ -15,7 +15,8 @@ public class Pawn extends Piece{
 		boolean valid = false;
 		if(moveCount == 0 && endPosition.getRow() == position.getRow() + (2 * colorModifier)
 				&& endPosition.getColumn() == position.getColumn()
-				&& ChessFunctions.findPiece(endPosition, chessBoard, darkPieces, lightPieces) == null)
+				&& ChessFunctions.findPiece(endPosition, chessBoard, darkPieces, lightPieces) == null
+				&& ChessFunctions.findPiece(new Position(position.getRow() + colorModifier, position.getColumn()), chessBoard, darkPieces, lightPieces) == null)
 		{
 			valid = true;
 		}
