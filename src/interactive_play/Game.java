@@ -201,13 +201,24 @@ public class Game extends Observable{
 			{
 				for(int x = 0; x < chessBoard.BOARD_SIZE; x++)
 				{
-					if((p.moveIsValid(new Position(i, x), chessBoard, darkPieces, lightPieces) && !piecesWithMoves.contains(p)))
+					if((p.moveIsValid(new Position(i, x), chessBoard, darkPieces, lightPieces)
+							|| p.captureIsValid(new Position(i, x), chessBoard, darkPieces, lightPieces, darkTurn)
+							&& !piecesWithMoves.contains(p)))
 					{
 						Position savedPosition = p.getPosition();
+						Piece enemyPiece = ChessFunctions.findPiece(new Position(i, x), chessBoard, darkPieces, lightPieces);
+						ArrayList<Piece> enemyPieces = (p.getColorModifier() == 1) ? lightPieces : darkPieces;
+						enemyPieces.remove(enemyPiece);
+						enemyPieces.remove(enemyPiece);
 						p.setPosition(new Position(i, x));
+						
 						if(!ChessFunctions.isInCheck(p.getColorModifier(), chessBoard, darkPieces, lightPieces, !darkTurn))
 						{
 							piecesWithMoves.add(p);
+						}
+						if(enemyPiece != null)
+						{
+							enemyPieces.add(enemyPiece);
 						}
 						p.setPosition(savedPosition);
 					}
@@ -232,11 +243,19 @@ public class Game extends Observable{
 				if(piece.moveIsValid(new Position(i, x), chessBoard, darkPieces, lightPieces) 
 						|| piece.captureIsValid(new Position(i, x), chessBoard, darkPieces, lightPieces, darkTurn))
 				{
+					Piece enemyPiece = ChessFunctions.findPiece(new Position(i, x), chessBoard, darkPieces, lightPieces);
+					ArrayList<Piece> enemyPieces = (piece.getColorModifier() == 1) ? lightPieces : darkPieces;
+					enemyPieces.remove(enemyPiece);
+					enemyPieces.remove(enemyPiece);
 					piece.setPosition(new Position(i, x));
-					ChessFunctions.updateBoard(chessBoard, darkPieces, lightPieces);
+					
 					if(!ChessFunctions.isInCheck(piece.getColorModifier(), chessBoard, darkPieces, lightPieces, !darkTurn))
 					{
 						moves.add(new Position(i, x));
+					}
+					if(enemyPiece != null)
+					{
+						enemyPieces.add(enemyPiece);
 					}
 					piece.setPosition(savedPosition);
 				}

@@ -183,7 +183,8 @@ public class GUI {
 			{ 			
 				hasPiece = true;
 //				g.drawImage(resizeImage(PieceMap.returnImage(piece.getColorModifier(), piece.getPieceChar()).getImage(), this.getHeight(), this.getWidth()), 0, 0, null);
-				g.drawImage(PieceMap.returnImage(piece.getColorModifier(), piece.getPieceChar()).getImage(), 0, 0, null);
+				g.drawImage(PieceMap.returnImage(piece.getColorModifier(), piece.getPieceChar()).getImage(), 0, 0, getHeight(), getWidth(), null);
+//				g.drawImage(PieceMap.returnImage(piece.getColorModifier(), piece.getPieceChar()).getImage(), 0, 0, null);
 				
 				
 				if(isHovered && ChessFunctions.isRightTurn(game.isDarkTurn(), piece))
@@ -226,11 +227,16 @@ public class GUI {
 			public void mouseClicked(MouseEvent e) 
 			{
 				Piece piece = ChessFunctions.findPiece(position, game.getChessBoard(), game.getDarkPieces(), game.getLightPieces());
-				
+				ArrayList<Piece> moves = game.getPiecesWithMoves();
+				System.out.println(piece);
+				System.out.println(currentPiece);
 				if(!pieceAlreadySelected())
 				{
-					if(piece != null && ChessFunctions.isRightTurn(game.isDarkTurn(), piece) && game.getPiecesWithMoves().contains(piece))
+					System.out.println("No piece selected");
+					System.out.println(moves);
+					if(piece != null && ChessFunctions.isRightTurn(game.isDarkTurn(), piece) && moves.contains(piece))
 					{
+						System.out.println("Set to current piece");
 						currentPiece = piece;
 						isSelected = true;
 					}

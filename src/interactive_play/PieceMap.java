@@ -5,7 +5,7 @@ import javax.swing.ImageIcon;
 public class PieceMap {
 	private static final char[] PIECE_HASHES = new char[] {'k', 'q', 'b', 'n', 'r', 'p', 'l', 'd'};
 	private static final String[] PIECES = new String[] {"King", "Queen", "Bishop", "Knight", "Rook", "Pawn", "Light", "Dark"};
-	private static final String folderName = "PADPieces\\";
+	private static final String folderName = "NormalPieces\\";
 	private static final ImageIcon[] BLACK_IMAGES = new ImageIcon[] {new ImageIcon(folderName + "BlackKing.png"), new ImageIcon(folderName + "BlackQueen.png"),
 		new ImageIcon(folderName + "BlackBishop.png"), new ImageIcon(folderName + "BlackKnight.png"), new ImageIcon(folderName + "BlackRook.png"), 
 		new ImageIcon(folderName + "BlackPawn.png")};
